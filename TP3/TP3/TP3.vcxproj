@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="Acteur.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Joueur.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Testeur.cpp" />
   </ItemGroup>

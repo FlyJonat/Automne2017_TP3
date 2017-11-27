@@ -13,7 +13,6 @@ Game::Game()
 	//mainWin.setFramerateLimit(60);  //Équivalent... normalement, mais pas toujours. À utiliser si la synchonisation de l'écran fonctionne mal.
 	//https://www.sfml-dev.org/tutorials/2.0/window-window.php#controlling-the-framerate
 }
-
 int Game::testTest()
 {
 	return 0;
@@ -42,13 +41,14 @@ bool Game::init()
 	{
 		return false;
 	}
+	joueur.init();
 	//background = new Sprite(background);
 	background = new Sprite(backgroundT);
 	//"Ressources\\background.png"
 	return true;
 }
 
-void Game::getInputs()
+/*void Game::getInputs()
 {
 	//On passe l'événement en référence et celui-ci est chargé du dernier événement reçu!
 	while (mainWin->pollEvent(event))
@@ -59,11 +59,65 @@ void Game::getInputs()
 			mainWin->close();
 		}
 	}
+}*/
+void Game::getInputs()
+{
+	//On passe l'événement en référence et celui-ci est chargé du dernier événement reçu!
+	while (mainWin->pollEvent(event))
+	{
+		//x sur la fenêtre
+		getInput();
+		if (event.type == Event::Closed)
+		{
+			mainWin->close();
+		}
+	}
 }
-
+void Game::getInput()
+{
+	//x sur la fenêtre
+	if (event.type == Event::Closed)
+	{
+		//Attention, ici simplement fermer la fenêtre ne mettrait pas nécessairement 
+		//fin à l'application
+	}
+	if (event.type == Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			//isRunning = false;
+		}
+		else
+		{
+			inputs[event.key.code] = true;
+		}
+	}
+	if (event.type == Event::KeyReleased)
+	{
+		if (event.key.code != Keyboard::Escape)
+			inputs[event.key.code] = false;
+	}
+}
 void Game::update()
 {
-
+	joueur.velocity.x = 0;
+	//Déplacement
+	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
+	{
+		joueur.direction = Joueur::Direction::Gauche;
+		joueur.velocity.x = -joueur.vitesse;
+	}
+	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
+	{
+		joueur.direction = Joueur::Direction::Droite;
+		joueur.velocity.x = joueur.vitesse;
+	}
+	if (inputs[Keyboard::Space])
+	{
+		//joueur.Shoot();
+	}
+	//joueur.UpdateTexture(anime);
+	joueur.move(joueur.velocity.x, joueur.velocity.y);
 }
 
 void Game::draw()
@@ -71,6 +125,6 @@ void Game::draw()
 	//Toujours important d'effacer l'écran précédent
 	mainWin->clear();
 	mainWin->draw(*background);
-	mainWin->draw(*joueur.acteurSprite);
+	mainWin->draw(joueur);
 	mainWin->display();
 }
