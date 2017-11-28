@@ -37,14 +37,21 @@ int Game::run()
 
 bool Game::init()
 {
+	/*for(int i=0;i<2;i++)
+	{
+		if (!backgroundsT[i].loadFromFile("Ressources\\Backgrounds\\background.png"))
+		{
+			return false;
+		}
+		backgrounds[i] = new Sprite(backgroundsT[i]);
+		backgrounds[i]->setPosition(limiteDroite*i, 0);
+	}*/
 	if (!backgroundT.loadFromFile("Ressources\\Backgrounds\\background.png"))
 	{
 		return false;
 	}
-	joueur.init();
-	//background = new Sprite(background);
+	joueur.init(limiteGauche,limiteDroite,limiteHaut, limiteBas);
 	background = new Sprite(backgroundT);
-	//"Ressources\\background.png"
 	return true;
 }
 
@@ -101,16 +108,23 @@ void Game::getInput()
 void Game::update()
 {
 	joueur.velocity.x = 0;
+	joueur.velocity.y = 0;
 	//Déplacement
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
-		joueur.direction = Joueur::Direction::Gauche;
 		joueur.velocity.x = -joueur.vitesse;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
-		joueur.direction = Joueur::Direction::Droite;
 		joueur.velocity.x = joueur.vitesse;
+	}
+	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
+	{
+		joueur.velocity.y = -joueur.vitesse;
+	}
+	else if (inputs[Keyboard::Down] && !inputs[Keyboard::Up])
+	{
+		joueur.velocity.y = joueur.vitesse;
 	}
 	if (inputs[Keyboard::Space])
 	{
@@ -118,12 +132,27 @@ void Game::update()
 	}
 	//joueur.UpdateTexture(anime);
 	joueur.move(joueur.velocity.x, joueur.velocity.y);
+
+	//Vue
+	if (joueur.getPosition().x - view.getSize().x / 2 > limiteGauche && joueur.getPosition().x + view.getSize().x / 2 < limiteDroite)
+	{
+		view.setCenter(joueur.getPosition().x, view.getCenter().y);
+	}
+	if(joueur.getPosition().y - view.getSize().y / 2 > limiteHaut && joueur.getPosition().y + view.getSize().y / 2 < limiteBas)
+	{
+		view.setCenter(view.getCenter().x, joueur.getPosition().y);
+	}
+	mainWin->setView(view);
 }
 
 void Game::draw()
 {
 	//Toujours important d'effacer l'écran précédent
 	mainWin->clear();
+	/*for(int i=0;i<2;i++)
+	{
+		mainWin->draw(*backgrounds[i]);
+	}*/
 	mainWin->draw(*background);
 	mainWin->draw(joueur);
 	mainWin->display();

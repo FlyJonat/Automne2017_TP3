@@ -18,13 +18,16 @@ private:
 	const int LARGEUR = 1280;
 	const int HAUTEUR = 720;
 
+	const float limiteGauche = 0;
+	const float limiteDroite = 2294*2;
+	const float limiteHaut = 0;
+	const float limiteBas = 1200;
+
 	bool init();
 	void getInputs();
 	void getInput();
 	void update();
 	void draw();
-
-	//Statique pour éviter les erreurs, à revoir
 	
 	View view;
 	Event event;
@@ -35,4 +38,6 @@ private:
 	Joueur joueur;
 	//touches
 	std::map<Keyboard::Key, bool> inputs;
+	Texture backgroundsT[2];
+	Sprite* backgrounds[2];
 };

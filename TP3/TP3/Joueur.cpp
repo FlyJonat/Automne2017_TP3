@@ -9,13 +9,20 @@ void Joueur::move(const float offSetX, const float offSetY)
 {
 	Sprite::move(offSetX, offSetY);
 	//Test sur les limites de l'écran
-	/*if (getPosition().x < limiteGauche)
+	if (getPosition().x < limiteGauche)
 	{
 		setPosition(limiteGauche, getPosition().y);
 	}
 	else if (getPosition().x + getGlobalBounds().width > limiteDroite)
 	{
 		setPosition(limiteDroite - getGlobalBounds().width, getPosition().y);
-	}*/
-	setPosition(getPosition().x, getPosition().y);
+	}
+	if (getPosition().y < limiteHaut)
+	{
+		setPosition(getPosition().x, limiteHaut);
+	}
+	else if (getPosition().y + getGlobalBounds().height > limiteBas)
+	{
+		setPosition(getPosition().x, limiteBas - getGlobalBounds().height);
+	}
 }

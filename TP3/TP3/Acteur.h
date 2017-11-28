@@ -6,6 +6,7 @@ using namespace sf;
 	{
 		Texture acteurSpriteT;
 		std::string texturePath;
+		
 	public:
 		Acteur(std::string texturePath);
 		~Acteur();
@@ -13,6 +14,10 @@ using namespace sf;
 		Direction direction = Direction::Immobile;
 		Vector2f velocity;
 		float vitesse = 5;
-		virtual void move(const float offSetX, const float offSetY);
-		bool init();
+		void move(const float offSetX, const float offSetY);
+		bool init(float limiteGauche,float limiteDroite, float limiteHaut, float limiteBas);
+		float limiteDroite;
+		float limiteGauche;
+		float limiteHaut;
+		float limiteBas;
 	};
