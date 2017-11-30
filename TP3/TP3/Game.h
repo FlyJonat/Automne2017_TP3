@@ -31,13 +31,14 @@ private:
 	
 	View view;
 	Event event;
-	//test 
-	Sprite* background;
-	Texture backgroundT;
 	//Acteur
 	Joueur joueur;
 	//touches
 	std::map<Keyboard::Key, bool> inputs;
+	//background
+	int nbBackground;
+	float deplacementBackgroundX;
+	float deplacementBackgroundY;
 	Texture backgroundsT[2];
 	Sprite* backgrounds[2];
 };

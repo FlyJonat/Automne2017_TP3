@@ -37,21 +37,17 @@ int Game::run()
 
 bool Game::init()
 {
-	/*for(int i=0;i<2;i++)
+	nbBackground = 2;
+	for(int i=0;i<nbBackground;i++)
 	{
 		if (!backgroundsT[i].loadFromFile("Ressources\\Backgrounds\\background.png"))
 		{
 			return false;
 		}
 		backgrounds[i] = new Sprite(backgroundsT[i]);
-		backgrounds[i]->setPosition(limiteDroite*i, 0);
-	}*/
-	if (!backgroundT.loadFromFile("Ressources\\Backgrounds\\background.png"))
-	{
-		return false;
+		backgrounds[i]->setPosition((limiteDroite/nbBackground)*i, 0);
 	}
 	joueur.init(limiteGauche,limiteDroite,limiteHaut, limiteBas);
-	background = new Sprite(backgroundT);
 	return true;
 }
 
@@ -109,14 +105,17 @@ void Game::update()
 {
 	joueur.velocity.x = 0;
 	joueur.velocity.y = 0;
+	deplacementBackgroundX = 0;
 	//Déplacement
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
 		joueur.velocity.x = -joueur.vitesse;
+		deplacementBackgroundX = 0.5f;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
 		joueur.velocity.x = joueur.vitesse;
+		deplacementBackgroundX = -0.5f;
 	}
 	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
 	{
@@ -132,7 +131,10 @@ void Game::update()
 	}
 	//joueur.UpdateTexture(anime);
 	joueur.move(joueur.velocity.x, joueur.velocity.y);
-
+	for (int i = 0; i<nbBackground; i++)
+	{
+		backgrounds[i]->move(deplacementBackgroundX, 0);
+	}
 	//Vue
 	if (joueur.getPosition().x - view.getSize().x / 2 > limiteGauche && joueur.getPosition().x + view.getSize().x / 2 < limiteDroite)
 	{
@@ -142,6 +144,7 @@ void Game::update()
 	{
 		view.setCenter(view.getCenter().x, joueur.getPosition().y);
 	}
+	//mouvement background
 	mainWin->setView(view);
 }
 
@@ -149,11 +152,10 @@ void Game::draw()
 {
 	//Toujours important d'effacer l'écran précédent
 	mainWin->clear();
-	/*for(int i=0;i<2;i++)
+	for(int i=0;i<2;i++)
 	{
 		mainWin->draw(*backgrounds[i]);
-	}*/
-	mainWin->draw(*background);
+	}
 	mainWin->draw(joueur);
 	mainWin->display();
 }
