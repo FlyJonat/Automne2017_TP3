@@ -131,7 +131,7 @@ void Game::update()
 	//joueur.UpdateTexture(anime);
 	joueur.move(joueur.velocity.x, joueur.velocity.y);
 	//mouvement background
-	if(joueur.getPosition().x>=LARGEURBACKGROUND && ((joueur.getPosition().x)%LARGEURBACKGROUND)>50)
+	if(joueur.getPosition().x>=(int)joueur.getPosition().x%LARGEURBACKGROUND+50)
 	{
 
 	}
