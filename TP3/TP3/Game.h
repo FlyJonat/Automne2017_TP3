@@ -17,8 +17,9 @@ public:
 private:
 	//background
 	int nbBackground=2;
+	int nbEspaceBackground = 5;
 	float deplacementBackgroundX;
-	float deplacementBackgroundY;
+	int currentBackground;
 	Texture backgroundsT[2];
 	Sprite* backgrounds[2];
 	const int LARGEUR = 1280;
@@ -26,7 +27,7 @@ private:
 	const int LARGEURBACKGROUND = 2294;
 
 	const float limiteGauche = 0;
-	const float limiteDroite = LARGEURBACKGROUND*nbBackground;
+	const float limiteDroite = LARGEURBACKGROUND*nbEspaceBackground;
 	const float limiteHaut = 0;
 	const float limiteBas = 1200;
 
@@ -39,7 +40,7 @@ private:
 	View view;
 	Event event;
 	//Acteur
-	Joueur joueur;
+	Joueur* joueur;
 	//touches
 	std::map<Keyboard::Key, bool> inputs;
 	
