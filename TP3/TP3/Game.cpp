@@ -247,7 +247,7 @@ void Game::update()
 			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground - 1), 0);
 		}
 	}
-	/*for (int i = 0; i<nbBackground; i++)
+	/*for (int i = 0; i<NB_BACKGROUND; i++)
 	{
 		backgrounds[i]->move(deplacementBackgroundX, 0);
 	}*/
