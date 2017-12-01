@@ -73,7 +73,7 @@ bool Acteur::IsColliding(FloatRect objet)
 	if (Sprite::getGlobalBounds().intersects(objet))
 	{
 		//Colision avec le planché
-		if (((getPosition().y + getOrigin().y) - (objet.top)) <= 5 && ((getPosition().y + getOrigin().y) - (objet.top) >= -5))
+		if (((getPosition().y + getOrigin().y) - (objet.top)) <= 10 && ((getPosition().y + getOrigin().y) - (objet.top) >= -10))
 		{
 			cantMoveBot = true;
 		}
@@ -86,13 +86,13 @@ bool Acteur::IsColliding(FloatRect objet)
 		}
 
 		//Colision avec le coté droit
-		else if (getPosition().x + getOrigin().x - objet.left <= 5 && getPosition().x + getOrigin().x - objet.left >= -5)
+		else if (getPosition().x + getOrigin().x - objet.left <= 10 && getPosition().x + getOrigin().x - objet.left >= -10)
 		{
 			cantMoveRight = true;
 		}
 
 		//Colision avec le coté gauche	
-		else if (getPosition().x - getOrigin().x - objet.left - objet.width <= 5 && getPosition().x - getOrigin().x - objet.left - objet.width >= -5)
+		else if (getPosition().x - getOrigin().x - objet.left - objet.width <= 10 && getPosition().x - getOrigin().x - objet.left - objet.width >= -10)
 		{
 			cantMoveLeft = true;
 		}
