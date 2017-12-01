@@ -29,4 +29,4 @@ namespace sideSpaceShooter
 		float limiteBas;
 
 	};
-}	};
+}

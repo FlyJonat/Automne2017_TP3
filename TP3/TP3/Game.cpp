@@ -225,26 +225,26 @@ void Game::update()
 	{
 		test = joueur->getPosition().x;
 	}*/
-	if(test>=(LARGEURBACKGROUND*currentBackground)+1000  && currentBackground>0 && currentBackground<4)
+	if(test>=(LARGEUR_BACKGROUND*currentBackground)+1000  && currentBackground>0 && currentBackground<4)
 	{
 		if(currentBackground%2==0)
 		{
-			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground + 1), 0);
+			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground + 1), 0);
 		}
 		else if (currentBackground % 2 == 1)
 		{
-			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground + 1), 0);
+			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground + 1), 0);
 		}
 	}
-	else if(test <= ((LARGEURBACKGROUND*(currentBackground+2)) - 1000) && currentBackground>0 && currentBackground<4)
+	else if(test <= ((LARGEUR_BACKGROUND*(currentBackground+2)) - 1000) && currentBackground>0 && currentBackground<4)
 	{
 		if (currentBackground % 2 == 0)
 		{
-			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground - 1), 0);
+			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground - 1), 0);
 		}
 		else if (currentBackground % 2 == 1)
 		{
-			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground - 1), 0);
+			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground - 1), 0);
 		}
 	}
 	/*for (int i = 0; i<nbBackground; i++)
