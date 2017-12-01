@@ -56,6 +56,7 @@ bool Game::init()
 	joueur = new Joueur();
 	joueur->init(limiteGauche, limiteDroite, limiteHaut, limiteBas);
 
+
 	// Chargement des sprites pour les tuiles
 	for (int i = 0; i < NB_TUILES_METALIQUE; ++i)
 	{
@@ -76,6 +77,7 @@ bool Game::init()
 	string currentLine; // Ligne courante
 	int levelLine = 0; // Indique à quel niveau du tableau on est rendu.
 	int numTuile = 0;
+	int numRandom = 0;
 	while (getline(readLevel, currentLine))
 	{
 		if ((int)currentLine.at(0) != 35)
@@ -91,8 +93,10 @@ bool Game::init()
 					joueur->setPosition((i * TAILLE_TUILES_X), (levelLine * TAILLE_TUILES_Y) + 56 / 2);
 					break;
 				case 50: // Sol
-					grilleDeTuiles[numTuile] = new Sprite(tuilesMetaliquesT[rand() % NB_TUILES_METALIQUE]);
+					numRandom = rand() % NB_TUILES_METALIQUE;
+					grilleDeTuiles[numTuile] = new Sprite(tuilesMetaliquesT[numRandom]);
 					grilleDeTuiles[numTuile]->setPosition(i * TAILLE_TUILES_X, levelLine* TAILLE_TUILES_Y);
+					grilleDeTuiles[numTuile]->setOrigin(tuilesMetaliquesT[numRandom].getSize().x / 2, tuilesMetaliquesT[numRandom].getSize().y / 2);
 					++numTuile;
 					break;
 				case 51: // Plateforme
@@ -109,7 +113,7 @@ bool Game::init()
 				case 55: // Bouffe
 
 					break;
-				case 56: // Sortie
+				case 56: // SortieF
 
 					break;
 				default:
@@ -187,34 +191,48 @@ void Game::getInput()
 }
 void Game::update()
 {
-	velocity.x = 0;
-	velocity.y = 0;
+	
+	joueur->ResetCantMove();
+	for (size_t i = 0; i < MAX_TUILES; i++)
+	{
+		if (grilleDeTuiles[i] != nullptr)
+		{
+			joueur->IsColliding(grilleDeTuiles[i]->getGlobalBounds());
+		}
+		else
+		{
+			break;
+		}
+	}
+	Vector2f direction;
+	direction.x = 0;
+	direction.y = 0;
 	deplacementBackgroundX = 0;
 	//Déplacement
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
-		velocity.x = -joueur->vitesse;
+		direction.x = -1;
 		deplacementBackgroundX = 1;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
-		velocity.x = joueur->vitesse;
+		direction.x = 1;
 		deplacementBackgroundX = -1;
 	}
 	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
 	{
-		velocity.y = -joueur->vitesse;
+		direction.y = -1;
 	}
 	else if (inputs[Keyboard::Down] && !inputs[Keyboard::Up])
 	{
-		velocity.y = joueur->vitesse;
+		direction.y = 1;
 	}
 	if (inputs[Keyboard::Space])
 	{
 		//joueur->Shoot();
 	}
 	//joueur->UpdateTexture(anime);
-	joueur->move(velocity.x, velocity.y);
+	joueur->move(direction);
 	//mouvement background
 	currentBackground = (int)joueur->getPosition().x/ LARGEUR_BACKGROUND;
 	//test
