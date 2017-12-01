@@ -28,6 +28,7 @@ namespace sideSpaceShooter
 		static const int NB_ESPACE_BACKGROUND = 5;
 
 		float deplacementBackgroundX;
+		float deplacementBackgroundTotal;
 		int currentBackground;
 		Texture backgroundsT[NB_BACKGROUND];
 		Sprite* backgrounds[NB_BACKGROUND];
