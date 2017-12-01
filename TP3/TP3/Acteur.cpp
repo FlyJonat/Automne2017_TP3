@@ -1,4 +1,8 @@
 #include "Acteur.h"
+
+using namespace sideSpaceShooter;
+using namespace std;
+
 Acteur::Acteur(std::string texturePath):velocity(0,0)
 {
 	this->texturePath = texturePath;
@@ -18,6 +22,7 @@ bool Acteur::init(float limiteGauche, float limiteDroite,float limiteHaut, float
 	this->limiteDroite = limiteDroite;
 	this->limiteHaut = limiteHaut;
 	this->limiteBas = limiteBas;
+
 	return true;
 }
 void Acteur::move(const float offSetX, const float offSetY)

@@ -1,5 +1,9 @@
 #include "Game.h"
+#include <fstream>
+#include <sstream>
 
+using namespace sideSpaceShooter;
+using namespace std;
 
 Game::Game()
 {
@@ -37,6 +41,63 @@ int Game::run()
 
 bool Game::init()
 {
+	// Chargement des sprites pour les tuiles
+	for (int i = 0; i < NB_TUILES_METALIQUE; ++i)
+	{
+		if (!tuilesMetaliquesT[i].loadFromFile("Ressources\\Tiles\\Bloc" + to_string(i) + ".png"))
+		{
+			return false;
+		}
+	}
+
+	srand(time(NULL));
+
+	// On charge un niveau à partir d'un fichier .txt
+	ifstream readLevel("Ressources\\Level\\level1.txt"); // Lecture d'un niveau par fichier texte
+	string currentLine; // Ligne courante
+	int levelLine = 0; // Indique à quel niveau du tableau on est rendu.
+	while (getline(readLevel, currentLine))
+	{
+		if ((int)currentLine.at(0) != 35)
+		{
+
+			for (int i = 0; i < currentLine.length(); ++i)
+			{
+
+				int currentNumber = (int)currentLine.at(i);
+				switch (currentNumber)
+				{
+				case 49: // Joueur
+					break;
+				case 50: // Sol
+					grilleDeTuiles[i] = new Sprite(tuilesMetaliquesT[rand() % NB_TUILES_METALIQUE]);
+					grilleDeTuiles[i]->setPosition(i * TAILLE_TUILES_X, levelLine* TAILLE_TUILES_Y);
+					break;
+				case 51: // Plateforme
+					break;
+				case 52: // Ennemi 0
+
+					break;
+				case 53: // Ennemi 1
+
+					break;
+				case 54: // Ennemi 2
+
+					break;
+				case 55: // Bouffe
+
+					break;
+				case 56: // Sortie
+
+					break;
+				default:
+					break;
+				}
+			}
+			levelLine++;
+		}
+	}
+
 	nbBackground = 2;
 	for(int i=0;i<nbBackground;i++)
 	{
