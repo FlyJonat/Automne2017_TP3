@@ -1,6 +1,6 @@
 #include "Testeur.h"
 
-
+using namespace sideSpaceShooter;
 Testeur::Testeur()
 {
 
