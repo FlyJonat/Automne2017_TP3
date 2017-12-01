@@ -1,5 +1,9 @@
 #include "Game.h"
+#include <fstream>
+#include <sstream>
 
+using namespace sideSpaceShooter;
+using namespace std;
 
 Game::Game()
 {
@@ -12,6 +16,19 @@ Game::Game()
 	mainWin->setVerticalSyncEnabled(true);
 	//mainWin.setFramerateLimit(60);  //Équivalent... normalement, mais pas toujours. À utiliser si la synchonisation de l'écran fonctionne mal.
 	//https://www.sfml-dev.org/tutorials/2.0/window-window.php#controlling-the-framerate
+}
+
+Game::~Game()
+{
+	delete joueur;
+	for (size_t i = 0; i < NB_BACKGROUND; i++)
+	{
+		delete backgrounds[i];
+	}
+	for (size_t i = 0; i < MAX_TUILES; i++)
+	{
+		delete grilleDeTuiles[i];
+	}
 }
 int Game::testTest()
 {
@@ -31,23 +48,89 @@ int Game::run()
 		update();
 		draw();
 	}
-	delete joueur;
 	return EXIT_SUCCESS;
 }
 
 bool Game::init()
 {
-	for(int i=0;i<nbBackground;i++)
+	joueur = new Joueur();
+	joueur->init(limiteGauche, limiteDroite, limiteHaut, limiteBas);
+
+	// Chargement des sprites pour les tuiles
+	for (int i = 0; i < NB_TUILES_METALIQUE; ++i)
+	{
+		if (!tuilesMetaliquesT[i].loadFromFile("Ressources\\Sprites\\bloc" + to_string(i) + ".png"))
+		{
+			return false;
+		}
+	}
+
+	for (size_t i = 0; i < MAX_TUILES; i++)
+	{
+		grilleDeTuiles[i] = nullptr;
+	}
+	srand(time(NULL));
+
+	// On charge un niveau à partir d'un fichier .txt
+	ifstream readLevel("Ressources\\Level\\level1.txt"); // Lecture d'un niveau par fichier texte
+	string currentLine; // Ligne courante
+	int levelLine = 0; // Indique à quel niveau du tableau on est rendu.
+	int numTuile = 0;
+	while (getline(readLevel, currentLine))
+	{
+		if ((int)currentLine.at(0) != 35)
+		{
+
+			for (int i = 0; i < currentLine.length(); ++i)
+			{
+
+				int currentNumber = (int)currentLine.at(i);
+				switch (currentNumber)
+				{
+				case 49: // Joueur
+					joueur->setPosition((i * TAILLE_TUILES_X), (levelLine * TAILLE_TUILES_Y) + 56 / 2);
+					break;
+				case 50: // Sol
+					grilleDeTuiles[numTuile] = new Sprite(tuilesMetaliquesT[rand() % NB_TUILES_METALIQUE]);
+					grilleDeTuiles[numTuile]->setPosition(i * TAILLE_TUILES_X, levelLine* TAILLE_TUILES_Y);
+					++numTuile;
+					break;
+				case 51: // Plateforme
+					break;
+				case 52: // Ennemi 0
+
+					break;
+				case 53: // Ennemi 1
+
+					break;
+				case 54: // Ennemi 2
+
+					break;
+				case 55: // Bouffe
+
+					break;
+				case 56: // Sortie
+
+					break;
+				default:
+					break;
+				}
+			}
+			levelLine++;
+		}
+	}
+
+
+	for(int i = 0; i < NB_BACKGROUND; ++i)
 	{
 		if (!backgroundsT[i].loadFromFile("Ressources\\Backgrounds\\background.png"))
 		{
 			return false;
 		}
 		backgrounds[i] = new Sprite(backgroundsT[i]);
-		backgrounds[i]->setPosition((limiteDroite/nbEspaceBackground)*i, 0);
+		backgrounds[i]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND) * i, 0);
 	}
-	joueur = new Joueur();
-	joueur->init(limiteGauche,limiteDroite,limiteHaut, limiteBas);
+	
 	currentBackground = 0;
 	return true;
 }
@@ -133,7 +216,7 @@ void Game::update()
 	//joueur->UpdateTexture(anime);
 	joueur->move(velocity.x, velocity.y);
 	//mouvement background
-	currentBackground = (int)joueur->getPosition().x/LARGEURBACKGROUND;
+	currentBackground = (int)joueur->getPosition().x/ LARGEUR_BACKGROUND;
 	//test
 	float test;
 	test = joueur->getPosition().x;
@@ -185,9 +268,20 @@ void Game::draw()
 {
 	//Toujours important d'effacer l'écran précédent
 	mainWin->clear();
-	for(int i=0;i<2;i++)
+	for(int i = 0; i < 2; i++)
 	{
 		mainWin->draw(*backgrounds[i]);
+	}
+	for (size_t i = 0; i < MAX_TUILES; i++)
+	{
+		if (grilleDeTuiles[i] != nullptr)
+		{
+			mainWin->draw(*grilleDeTuiles[i]);
+		}
+		else
+		{
+			break;
+		}
 	}
 	mainWin->draw(*joueur);
 	mainWin->display();

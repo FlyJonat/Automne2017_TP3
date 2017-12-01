@@ -1,4 +1,8 @@
 #include "Acteur.h"
+
+using namespace sideSpaceShooter;
+using namespace std;
+
 Acteur::Acteur(std::string texturePath):velocity(0,0)
 {
 	this->texturePath = texturePath;
