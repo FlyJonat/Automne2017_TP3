@@ -104,46 +104,65 @@ void Game::getInput()
 }
 void Game::update()
 {
-	joueur->velocity.x = 0;
-	joueur->velocity.y = 0;
+	velocity.x = 0;
+	velocity.y = 0;
 	deplacementBackgroundX = 0;
 	//Déplacement
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
-		joueur->velocity.x = -joueur->vitesse;
+		velocity.x = -joueur->vitesse;
 		deplacementBackgroundX = 1;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
-		joueur->velocity.x = joueur->vitesse;
+		velocity.x = joueur->vitesse;
 		deplacementBackgroundX = -1;
 	}
 	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
 	{
-		joueur->velocity.y = -joueur->vitesse;
+		velocity.y = -joueur->vitesse;
 	}
 	else if (inputs[Keyboard::Down] && !inputs[Keyboard::Up])
 	{
-		joueur->velocity.y = joueur->vitesse;
+		velocity.y = joueur->vitesse;
 	}
 	if (inputs[Keyboard::Space])
 	{
 		//joueur->Shoot();
 	}
 	//joueur->UpdateTexture(anime);
-	joueur->move(joueur->velocity.x, joueur->velocity.y);
+	joueur->move(velocity.x, velocity.y);
 	//mouvement background
 	currentBackground = (int)joueur->getPosition().x/LARGEURBACKGROUND;
 	//test
 	float test;
 	test = joueur->getPosition().x;
-	/*if (currentBackground == 1)
+	//test
+	/*if (currentBackground == 2)
 	{
 		test = joueur->getPosition().x;
 	}*/
-	if(test>=(LARGEURBACKGROUND*currentBackground)+50  && currentBackground>0 && currentBackground<4)
+	if(test>=(LARGEURBACKGROUND*currentBackground)+1000  && currentBackground>0 && currentBackground<4)
 	{
-		backgrounds[currentBackground%2]->setPosition(LARGEURBACKGROUND*currentBackground+LARGEURBACKGROUND*2,0);
+		if(currentBackground%2==0)
+		{
+			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground + 1), 0);
+		}
+		else if (currentBackground % 2 == 1)
+		{
+			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground + 1), 0);
+		}
+	}
+	else if(test <= ((LARGEURBACKGROUND*(currentBackground+2)) - 1000) && currentBackground>0 && currentBackground<4)
+	{
+		if (currentBackground % 2 == 0)
+		{
+			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground - 1), 0);
+		}
+		else if (currentBackground % 2 == 1)
+		{
+			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / nbEspaceBackground)*(currentBackground - 1), 0);
+		}
 	}
 	/*for (int i = 0; i<nbBackground; i++)
 	{

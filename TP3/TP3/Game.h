@@ -41,6 +41,7 @@ private:
 	Event event;
 	//Acteur
 	Joueur* joueur;
+	Vector2f velocity;
 	//touches
 	std::map<Keyboard::Key, bool> inputs;
 	
