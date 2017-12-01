@@ -113,7 +113,7 @@ bool Game::init()
 				case 55: // Bouffe
 
 					break;
-				case 56: // Sortie
+				case 56: // SortieF
 
 					break;
 				default:
@@ -204,35 +204,35 @@ void Game::update()
 			break;
 		}
 	}
-
-	joueur->velocity.x = 0;
-	joueur->velocity.y = 0;
+	Vector2f direction;
+	direction.x = 0;
+	direction.y = 0;
 	deplacementBackgroundX = 0;
 	//Déplacement
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
-		joueur->velocity.x = -joueur->VITESSE;
+		direction.x = -1;
 		deplacementBackgroundX = 1;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
-		joueur->velocity.x = joueur->VITESSE;
+		direction.x = 1;
 		deplacementBackgroundX = -1;
 	}
 	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
 	{
-		joueur->velocity.y = -joueur->VITESSE;
+		direction.y = -1;
 	}
 	else if (inputs[Keyboard::Down] && !inputs[Keyboard::Up])
 	{
-		joueur->velocity.y = joueur->VITESSE;
+		direction.y = 1;
 	}
 	if (inputs[Keyboard::Space])
 	{
 		//joueur->Shoot();
 	}
 	//joueur->UpdateTexture(anime);
-	joueur->move(joueur->velocity.x, joueur->velocity.y);
+	joueur->move(direction);
 	//mouvement background
 	currentBackground = (int)joueur->getPosition().x/ LARGEUR_BACKGROUND;
 	//test
