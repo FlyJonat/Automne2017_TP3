@@ -56,6 +56,7 @@ bool Game::init()
 	joueur = new Joueur();
 	joueur->init(limiteGauche, limiteDroite, limiteHaut, limiteBas);
 
+
 	// Chargement des sprites pour les tuiles
 	for (int i = 0; i < NB_TUILES_METALIQUE; ++i)
 	{
@@ -76,6 +77,7 @@ bool Game::init()
 	string currentLine; // Ligne courante
 	int levelLine = 0; // Indique à quel niveau du tableau on est rendu.
 	int numTuile = 0;
+	int numRandom = 0;
 	while (getline(readLevel, currentLine))
 	{
 		if ((int)currentLine.at(0) != 35)
@@ -91,8 +93,10 @@ bool Game::init()
 					joueur->setPosition((i * TAILLE_TUILES_X), (levelLine * TAILLE_TUILES_Y) + 56 / 2);
 					break;
 				case 50: // Sol
-					grilleDeTuiles[numTuile] = new Sprite(tuilesMetaliquesT[rand() % NB_TUILES_METALIQUE]);
+					numRandom = rand() % NB_TUILES_METALIQUE;
+					grilleDeTuiles[numTuile] = new Sprite(tuilesMetaliquesT[numRandom]);
 					grilleDeTuiles[numTuile]->setPosition(i * TAILLE_TUILES_X, levelLine* TAILLE_TUILES_Y);
+					grilleDeTuiles[numTuile]->setOrigin(tuilesMetaliquesT[numRandom].getSize().x / 2, tuilesMetaliquesT[numRandom].getSize().y / 2);
 					++numTuile;
 					break;
 				case 51: // Plateforme
@@ -187,27 +191,41 @@ void Game::getInput()
 }
 void Game::update()
 {
+	
+	joueur->ResetCantMove();
+	for (size_t i = 0; i < MAX_TUILES; i++)
+	{
+		if (grilleDeTuiles[i] != nullptr)
+		{
+			joueur->IsColliding(grilleDeTuiles[i]->getGlobalBounds());
+		}
+		else
+		{
+			break;
+		}
+	}
+
 	joueur->velocity.x = 0;
 	joueur->velocity.y = 0;
 	deplacementBackgroundX = 0;
 	//Déplacement
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
-		joueur->velocity.x = -joueur->vitesse;
+		joueur->velocity.x = -joueur->VITESSE;
 		deplacementBackgroundX = 1;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
-		joueur->velocity.x = joueur->vitesse;
+		joueur->velocity.x = joueur->VITESSE;
 		deplacementBackgroundX = -1;
 	}
 	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
 	{
-		joueur->velocity.y = -joueur->vitesse;
+		joueur->velocity.y = -joueur->VITESSE;
 	}
 	else if (inputs[Keyboard::Down] && !inputs[Keyboard::Up])
 	{
-		joueur->velocity.y = joueur->vitesse;
+		joueur->velocity.y = joueur->VITESSE;
 	}
 	if (inputs[Keyboard::Space])
 	{
