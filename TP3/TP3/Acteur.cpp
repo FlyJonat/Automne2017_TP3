@@ -26,7 +26,19 @@ bool Acteur::init(float limiteGauche, float limiteDroite,float limiteHaut, float
 
 	return true;
 }
-void Acteur::move(const Vector2f direction)
+
+void Acteur::Update()
+{
+	if (tempsDeRecharge > 0)
+	{
+		--tempsDeRecharge;
+	}
+	else
+	{
+		isCanShoot = true;
+	}
+}
+void Acteur::Move(const Vector2f direction)
 {
 	float directionX = direction.x;
 	float directionY = direction.y;
@@ -47,6 +59,7 @@ void Acteur::move(const Vector2f direction)
 	{
 		setPosition(getPosition().x, limiteBas - getGlobalBounds().height);
 	}
+
 
 	if (directionX != 0)
 	{
@@ -130,13 +143,13 @@ bool Acteur::IsColliding(FloatRect objet)
 	return false;
 }
 
-/// <summary>
-/// Resets the cant move.
-/// </summary>
-void Acteur::ResetCantMove()
+void Acteur::Shoot()
 {
-	cantMoveLeft = false;
-	cantMoveRight = false;
-	cantMoveTop = false;
-	cantMoveBot = false;
+	isCanShoot = false;
+	tempsDeRecharge = tempsEnFrameEntreDeuxTires;
+}
+
+const bool Acteur::GetIsCanShoot()
+{
+	return isCanShoot;
 }

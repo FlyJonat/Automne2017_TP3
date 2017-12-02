@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
 #include <string>
+#include <math.h>
 
 using namespace sf;
 
@@ -15,26 +16,29 @@ namespace sideSpaceShooter
 	public:
 		Acteur(std::string texturePath);
 		~Acteur();
+		bool init(float limiteGauche, float limiteDroite, float limiteHaut, float limiteBas);
 		bool IsColliding(FloatRect objet);
-		void ResetCantMove();
+		void Move(const Vector2f direction);
 
-	//protected:
-		enum Direction { Droite, Gauche, Haut, Bas, Immobile };
-		Direction direction = Direction::Immobile;
-		Vector2f velocity;
+		void Update();
+		void Shoot();
+		const bool GetIsCanShoot();
+
+	protected:
+		bool isCanShoot = true;
+		
+		int tempsEnFrameEntreDeuxTires = 15;
+		int tempsDeRecharge = 0;
+
 		float vitesseMax = 10;
 		float accelerationParSeconde = 5;
-		float autoDeccelerationParSeconde = 2.5;
-		void move(const Vector2f direction);
-		bool init(float limiteGauche, float limiteDroite, float limiteHaut, float limiteBas);
+		float autoDeccelerationParSeconde = 1.0;		
 		float limiteDroite;
 		float limiteGauche;
 		float limiteHaut;
 		float limiteBas;
-		bool cantMoveLeft = false; //Indique si l'acteur ne peut pas se deplacer vers la gauche.
-		bool cantMoveRight = false; //Indique si l'acteur ne peut pas se deplacer vers la droite.
-		bool cantMoveTop = false; //Indique si l'acteur ne peut pas se deplacer vers le haut.
-		bool cantMoveBot = false; //Indique si l'acteur ne peut pas se deplacer vers le bas.
+
+		Vector2f velocity;
 
 	};
 }
