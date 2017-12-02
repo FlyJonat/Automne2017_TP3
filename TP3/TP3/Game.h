@@ -36,8 +36,18 @@ namespace sideSpaceShooter
 		static const int NB_BACKGROUND = 2;
 		static const int NB_ESPACE_BACKGROUND = 5;
 
+<<<<<<< HEAD
 		const std::string textureBlocPath = "Ressources\\Sprites\\bloc";
 		const std::string textureLaserPath = "Ressources\\Sprites\\laser_projectiles.png";
+=======
+		float deplacementBackgroundX;
+		float deplacementBackgroundTotal;
+		int currentBackground;
+		Texture backgroundsT[NB_BACKGROUND];
+		Sprite* backgrounds[NB_BACKGROUND];
+		
+
+>>>>>>> 5f6de0807e64caa002bbcbc0fa481285b9e48636
 		const float limiteGauche = 0;
 		const float limiteDroite = LARGEUR_BACKGROUND * NB_ESPACE_BACKGROUND;
 		const float limiteHaut = 0;
@@ -52,6 +62,7 @@ namespace sideSpaceShooter
 		
 		Sprite* grilleDeTuiles[MAX_TUILES];
 		Texture tuilesMetaliquesT[NB_TUILES_METALIQUE];
+	Vector2f velocity;
 
 		//Acteur
 		Joueur* joueur;

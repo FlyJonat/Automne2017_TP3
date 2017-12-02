@@ -23,7 +23,6 @@ bool Acteur::init(float limiteGauche, float limiteDroite,float limiteHaut, float
 	this->limiteDroite = limiteDroite;
 	this->limiteHaut = limiteHaut;
 	this->limiteBas = limiteBas;
-
 	return true;
 }
 
