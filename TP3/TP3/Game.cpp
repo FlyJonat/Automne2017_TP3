@@ -62,6 +62,7 @@ bool Game::init()
 	joueur = new Joueur();
 	joueur->init(limiteGauche, limiteDroite, limiteHaut, limiteBas);
 
+
 	animationProjectileLaser = new AnimationProjectileLaser();
 	if (!animationProjectileLaser->init(textureLaserPath))
 	{
@@ -277,22 +278,44 @@ void Game::update()
 	}
 
 	//mouvement background
+	deplacementBackgroundTotal += deplacementBackgroundX;
 	currentBackground = (int)joueur->getPosition().x/ LARGEUR_BACKGROUND;
 	//test
 	float test;
 	test = joueur->getPosition().x;
-	/*if (currentBackground == 1)
+	//test
+	/*if (currentBackground == 2)
 	{
 		test = joueur->getPosition().x;
 	}*/
-	if(test>=(LARGEUR_BACKGROUND * currentBackground) + 50  && currentBackground > 0 && currentBackground < 4)
+	//Réapparition Background
+	if(test>=(LARGEUR_BACKGROUND*currentBackground)+(1000+deplacementBackgroundTotal)  && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
 	{
-		backgrounds[currentBackground %2]->setPosition(LARGEUR_BACKGROUND * currentBackground + LARGEUR_BACKGROUND * 2,0);
+		if(currentBackground%2==0)
+		{
+			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground + 1)+deplacementBackgroundTotal, 0);
+		}
+		else if (currentBackground % 2 == 1)
+		{
+			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground + 1)+deplacementBackgroundTotal, 0);
+		}
 	}
-	/*for (int i = 0; i<nbBackground; i++)
+	else if(test <= (LARGEUR_BACKGROUND*(currentBackground+2)) - (1000+deplacementBackgroundTotal) && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
+	{
+		if (currentBackground % 2 == 0)
+		{
+			backgrounds[(currentBackground % 2) + 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground - 1)+deplacementBackgroundTotal, 0);
+		}
+		else if (currentBackground % 2 == 1)
+		{
+			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground - 1)+deplacementBackgroundTotal, 0);
+		}
+	}
+	//déplacement background
+	for (int i = 0; i<NB_BACKGROUND; i++)
 	{
 		backgrounds[i]->move(deplacementBackgroundX, 0);
-	}*/
+	}
 	//Vue
 	if (joueur->getPosition().x - view.getSize().x / 2 > limiteGauche && joueur->getPosition().x + view.getSize().x / 2 < limiteDroite)
 	{
