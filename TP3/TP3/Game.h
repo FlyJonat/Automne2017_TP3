@@ -6,6 +6,8 @@
 
 using namespace sf;
 
+
+
 namespace sideSpaceShooter
 {
 	class Game
@@ -59,6 +61,7 @@ namespace sideSpaceShooter
 
 		//Acteur
 		Joueur* joueur;
+		int blocCollisionAvecJoueur;
 
 		vector<Projectile*> projectiles;
 		AnimationProjectileLaser * animationProjectileLaser;

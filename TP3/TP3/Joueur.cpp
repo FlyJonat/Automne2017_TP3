@@ -20,3 +20,29 @@ const int Joueur::GetNextShotOffset()
 	}
 	return nextShotOffset;
 }
+/// <summary>
+/// Avoir la distance qu'un joueur a parcouru.
+/// </summary>
+/// <returns></returns>
+float Joueur::GetDeplacement()
+{
+	return positionActuelle.x - positionPrecedente.x;
+}
+/// <summary>
+/// Déplace le joueur dépendamment s'il est entré en collision avec un bloc.
+/// </summary>
+/// <param name="direction">The direction.</param>
+/// <param name="objet">The objet.</param>
+void Joueur::Move(const Vector2f direction, FloatRect objet)
+{
+	positionPrecedente = getPosition();
+	Acteur::Move(direction);
+	Acteur::IsColliding(objet);
+	positionActuelle = getPosition();
+}
+void Joueur::Move(const Vector2f direction)
+{
+	positionPrecedente = getPosition();
+	Acteur::Move(direction);
+	positionActuelle = getPosition();
+}
