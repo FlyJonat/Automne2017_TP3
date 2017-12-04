@@ -1,6 +1,8 @@
 #pragma once
 #include "Projectile.h"
 
+//Laurent- 1562287
+
 namespace sideSpaceShooter
 {
 	class ProjectileBouleDeFeu : public Projectile

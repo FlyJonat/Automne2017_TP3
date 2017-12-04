@@ -1,5 +1,7 @@
 #include "ProjectileMissile.h"
 
+//Laurent- 1562287
+
 using namespace sideSpaceShooter;
 
 ProjectileMissile::ProjectileMissile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde,  Vector2f position, Vector2f direction) : Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, vitesseMax, accelerationParSeconde, position, direction)

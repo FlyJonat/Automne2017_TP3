@@ -1,5 +1,7 @@
 #include "Animation.h"
 
+//Laurent- 1562287
+
 using namespace sideSpaceShooter;
 
 Animation::Animation(const int nbColones, const int nbLignes, const int nbAnimes): nbColones(nbColones), nbLignes(nbLignes), nbAnimes(nbAnimes)
