@@ -1,19 +1,19 @@
-#include "ProjectileLaser.h"
+#include "ProjectileBouleDeFeu.h"
 
 using namespace sideSpaceShooter;
 
-ProjectileLaser::ProjectileLaser(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde, Vector2f position, Vector2f direction):  Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, vitesseMax, accelerationParSeconde, position, direction)
+ProjectileBouleDeFeu::ProjectileBouleDeFeu(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde, Vector2f position, Vector2f direction) : Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, vitesseMax, accelerationParSeconde, position, direction)
 {
 
 }
 
 
-ProjectileLaser::~ProjectileLaser()
+ProjectileBouleDeFeu::~ProjectileBouleDeFeu()
 {
 
 }
 
-void ProjectileLaser::Update()
+void ProjectileBouleDeFeu::Update()
 {
 	if (state == moving)
 	{
@@ -42,32 +42,47 @@ void ProjectileLaser::Update()
 		position.y += velocity.y;
 		rotation = (atan(velocity.y / velocity.x) * (180.0 / M_PI));
 	}
+
 	
+
 	UpdateAnimation();
 }
 
-void ProjectileLaser::UpdateAnimation()
+void ProjectileBouleDeFeu::UpdateAnimation()
 {
 	if (previousState != state)
 	{
 		previousState = state;
 		nbFrameFromBeginAnimation = 0;
 	}
-	++nbFrameFromBeginAnimation;
+	
 
 	if (state == moving)
 	{
-		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
+		if (revertingAnimation)
+		{
+			--nbFrameFromBeginAnimation;
+		}
+		else
+		{
+			++nbFrameFromBeginAnimation;
+		}
 
 		if (nbFrameFromBeginAnimation >= nbFramePourUnCycle)
 		{
-			nbFrameFromBeginAnimation = 0;
+			revertingAnimation = true;
 		}
+		else if (nbFrameFromBeginAnimation <= 0)
+		{
+			revertingAnimation = false;
+		}
+
+		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
 	}
 	else if (state == exploding)
 	{
 		currentAnimationNumber = floor(nbFrameFromBeginAnimation / 3);
-
+		++nbFrameFromBeginAnimation;
 		if (nbFrameFromBeginAnimation >= 47)
 		{
 			state = dead;
@@ -79,15 +94,16 @@ void ProjectileLaser::UpdateAnimation()
 /// Draws the specified fenetre.
 /// </summary>
 /// <param name="fenetre">The fenetre.</param>
-void ProjectileLaser::Draw(RenderWindow& fenetre)
+void ProjectileBouleDeFeu::Draw(RenderWindow& fenetre)
 {
 	if (state != dead)
 	{
+		animationsProjectilesSprites[state]->setRotation(rotation);
 		animationsProjectilesSprites[state]->setPosition(position);
 		animationsProjectilesSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
 
 		fenetre.draw(*animationsProjectilesSprites[state]);
 	}
-	
+
 }
 

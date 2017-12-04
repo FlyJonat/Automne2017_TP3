@@ -110,7 +110,7 @@ bool Acteur::IsColliding(FloatRect objet)
 	if (Sprite::getGlobalBounds().intersects(objet))
 	{
 		//Colision avec le planché
-		if (((getPosition().y + getOrigin().y) - (objet.top)) <= 20 && ((getPosition().y + getOrigin().y) - (objet.top) >= -20))
+		if (((getPosition().y + getOrigin().y) - (objet.top)) <= 30 && ((getPosition().y + getOrigin().y) - (objet.top) >= -30))
 		{
 			velocity.y *= -1;
 			Sprite::move(0,-((getPosition().y + getOrigin().y) - (objet.top)));
@@ -118,21 +118,21 @@ bool Acteur::IsColliding(FloatRect objet)
 
 		//Colision avec le plafond
 	
-		else if (((getPosition().y - getOrigin().y) - (objet.top + objet.height) <= 20) && ((getPosition().y - getOrigin().y) - (objet.top + objet.height) >= -20))
+		else if (((getPosition().y - getOrigin().y) - (objet.top + objet.height) <= 30) && ((getPosition().y - getOrigin().y) - (objet.top + objet.height) >= -30))
 		{
 			velocity.y *= -1;
 			Sprite::move(0, -((getPosition().y - getOrigin().y) - (objet.top + objet.height)));
 		}
 
 		//Colision avec le coté droit
-		else if (getPosition().x + getOrigin().x - objet.left <= 20 && getPosition().x + getOrigin().x - objet.left >= -20)
+		else if (getPosition().x + getOrigin().x - objet.left <= 30 && getPosition().x + getOrigin().x - objet.left >= -30)
 		{
 			velocity.x *= -1;
 			Sprite::move(-(getPosition().x + getOrigin().x - objet.left), 0);
 		}
 
 		//Colision avec le coté gauche	
-		else if (getPosition().x - getOrigin().x - objet.left - objet.width <= 20 && getPosition().x - getOrigin().x - objet.left - objet.width >= -20)
+		else if (getPosition().x - getOrigin().x - objet.left - objet.width <= 30 && getPosition().x - getOrigin().x - objet.left - objet.width >= -30)
 		{
 			velocity.x *= -1;
 			Sprite::move(-(getPosition().x - getOrigin().x - objet.left - objet.width), 0);

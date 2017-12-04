@@ -21,8 +21,11 @@ Game::Game()
 Game::~Game()
 {
 	delete joueur;
-	delete animationProjectileLaser;
-
+	
+	for (size_t i = 0; i < NB_SPRITE_SHEET_ANIMATION; ++i)
+	{
+		delete animations[i];
+	}
 	for (size_t i = 0; i < NB_BACKGROUND; i++)
 	{
 		delete backgrounds[i];
@@ -62,9 +65,31 @@ bool Game::init()
 	joueur = new Joueur();
 	joueur->init(limiteGauche, limiteDroite, limiteHaut, limiteBas);
 
+	for (size_t i = 0; i < NB_SPRITE_SHEET_ANIMATION; ++i)
+	{
+		animations[i] = nullptr;
+	}
 
-	animationProjectileLaser = new AnimationProjectileLaser();
-	if (!animationProjectileLaser->init(textureLaserPath))
+	animations[animationLaser] = new Animation(NB_COLONES_LASER_ANIMATION, NB_LIGNES_LASER_ANIMATION, NB_ANIMES_LASER_ANIMATION);
+	if (!animations[animationLaser]->init(textureLaserPath))
+	{
+		return false;
+	}
+
+	animations[animationMissile] = new Animation(NB_COLONES_MISSILE_ANIMATION, NB_LIGNES_MISSILE_ANIMATION, NB_ANIMES_MISSILE_ANIMATION);
+	if (!animations[animationMissile]->init(textureMissilePath))
+	{
+		return false;
+	}
+
+	animations[animationBouleDeFeu] = new Animation(NB_COLONES_BOULE_DE_FEU_ANIMATION, NB_LIGNES_BOULE_DE_FEU_ANIMATION, NB_ANIMES_BOULE_DE_FEU_ANIMATION);
+	if (!animations[animationBouleDeFeu]->init(textureBouleDeFeuPath))
+	{
+		return false;
+	}
+
+	animations[animationProjectileExplosion] = new Animation(NB_COLONES_EXPLOSION_PROJECTILE_ANIMATION, NB_LIGNES_EXPLOSION_PROJECTILE_ANIMATION, NB_ANIMES_EXPLOSION_PROJECTILE_ANIMATION);
+	if (!animations[animationProjectileExplosion]->init(textureExplosionProjectilePath))
 	{
 		return false;
 	}
@@ -249,27 +274,44 @@ void Game::update()
 		directionProjectile.y = 0;
 		Vector2f positionProjectile;
 		positionProjectile.x = joueur->getPosition().x;
-		positionProjectile.y = joueur->getPosition().y + (joueur->getOrigin().y  * joueur->GetNextShotOffset());
+		positionProjectile.y = joueur->getPosition().y + (joueur->getOrigin().y /* * joueur->GetNextShotOffset()*/);
 		//Création du projectile
-		Projectile* p = new ProjectileLaser(animationProjectileLaser, 11, 60.0f, 60.0f, positionProjectile, directionProjectile);
-		projectiles.push_back(p);
+		//Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11, 60.0f, 60.0f, positionProjectile, directionProjectile);
+		//projectiles.push_back(p);
+
+		/*Projectile* a = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, 5.0f, 60.0f, positionProjectile, directionProjectile);
+		projectiles.push_back(a);
+		directionProjectile.y = 1;
+		Projectile* b = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, 5.0f, 60.0f, positionProjectile, directionProjectile);
+		projectiles.push_back(b);
+		directionProjectile.y = -1;
+		Projectile* c = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, 5.0f, 60.0f, positionProjectile, directionProjectile);		
+		projectiles.push_back(c);*/
+
+		Projectile* d = new ProjectileMissile(animations[animationMissile], animations[animationProjectileExplosion], 8, 6.0f, 6.0f, positionProjectile, directionProjectile);
+		projectiles.push_back(d);
 	}
 	//Vérifie la collision entre un projectile et une tuile.
-	for (size_t i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
+		
+		if (projectiles[i]->GetState() == moving)
+		{
+			for (size_t j = 0; j < MAX_TUILES; ++j)
+			{
+				if (grilleDeTuiles[j] != nullptr)
+				{
+					//Détruit le projectile en cas de collision.
+					if (projectiles[i]->IsColliding(grilleDeTuiles[j]->getPosition(), TAILLE_TUILES_X, TAILLE_TUILES_Y))
+					{
+						projectiles[i]->Exploding();
+						break;
+					}
+				}
+			}
+		}
+		
 		projectiles[i]->Update();
-
-		//for (size_t j = 0; i < MAX_TUILES; ++j)
-		//{
-		//	if (grilleDeTuiles[j] != nullptr)
-		//	{
-		//		//Détruit le projectile en cas de collision.
-		//		if (projectiles[i]->IsColliding(grilleDeTuiles[j]->getPosition(), TAILLE_TUILES_X, TAILLE_TUILES_Y))
-		//		{
-		//			projectiles[i]->HaveToDie();
-		//		}
-		//	}
-		//}	
 		//Vérifie la collision entre le joueur et un projectile. Le joueur meurt en cas de collision.
 		/*if (projectiles[i]->IsColliding(joueur->getPosition(), TAILLE_TUILES_X, TAILLE_TUILES_Y))
 		{
@@ -328,6 +370,7 @@ void Game::update()
 	
 	mainWin->setView(view);
 
+	checkIfIsDead();
 	++timer;
 }
 
@@ -367,7 +410,7 @@ void Game::checkIfIsDead()
 	//Vérifie les projectiles morts
 	for (size_t i = 0; i < projectiles.size(); i++)
 	{
-		if (projectiles[i]->GetHaveToDie())
+		if (projectiles[i]->GetState() == dead)
 		{
 			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i);
