@@ -64,6 +64,7 @@ bool Game::init()
 {
 	joueur = new Joueur();
 	joueur->init(limiteGauche, limiteDroite, limiteHaut, limiteBas);
+	deplacementBackgroundTotal = 0;
 
 	for (size_t i = 0; i < NB_SPRITE_SHEET_ANIMATION; ++i)
 	{
@@ -94,7 +95,6 @@ bool Game::init()
 		return false;
 	}
 	
-
 	// Chargement des sprites pour les tuiles
 	for (int i = 0; i < NB_TUILES_METALIQUE; ++i)
 	{
@@ -162,7 +162,7 @@ bool Game::init()
 		}
 	}
 
-
+	//Initialisation du background
 	for(int i = 0; i < NB_BACKGROUND; ++i)
 	{
 		if (!backgroundsT[i].loadFromFile("Ressources\\Backgrounds\\background.png"))
@@ -177,18 +177,6 @@ bool Game::init()
 	return true;
 }
 
-/*void Game::getInputs()
-{
-	//On passe l'événement en référence et celui-ci est chargé du dernier événement reçu!
-	while (mainWin->pollEvent(event))
-	{
-		//x sur la fenêtre
-		if (event.type == Event::Closed)
-		{
-			mainWin->close();
-		}
-	}
-}*/
 void Game::getInputs()
 {
 	//On passe l'événement en référence et celui-ci est chargé du dernier événement reçu!
@@ -230,11 +218,19 @@ void Game::getInput()
 void Game::update()
 {
 	joueur->Update();
+	//Vérification si le joueur a eu une collision avec un bloc
 	for (size_t i = 0; i < MAX_TUILES; i++)
 	{
 		if (grilleDeTuiles[i] != nullptr)
 		{
-			joueur->IsColliding(grilleDeTuiles[i]->getGlobalBounds());
+			if(joueur->IsColliding(grilleDeTuiles[i]->getGlobalBounds()))
+			{
+				blocCollisionAvecJoueur = i;
+			}
+			else
+			{
+				blocCollisionAvecJoueur = -1;
+			}
 		}
 		else
 		{
@@ -249,12 +245,10 @@ void Game::update()
 	if (inputs[Keyboard::Left] && !inputs[Keyboard::Right])
 	{
 		direction.x = -1;
-		deplacementBackgroundX = 1;
 	}
 	else if (inputs[Keyboard::Right] && !inputs[Keyboard::Left])
 	{
 		direction.x = 1;
-		deplacementBackgroundX = -1;
 	}
 	if (inputs[Keyboard::Up] && !inputs[Keyboard::Down])
 	{
@@ -264,7 +258,19 @@ void Game::update()
 	{
 		direction.y = 1;
 	}
-	joueur->Move(direction);
+	//Mouvement du joueur
+	//Pas de collision
+	if(blocCollisionAvecJoueur=-1)
+	{
+		joueur->Move(direction);
+	}
+	//Collision
+	else
+	{
+		joueur->Move(direction, grilleDeTuiles[blocCollisionAvecJoueur]->getGlobalBounds());
+	}
+
+	deplacementBackgroundX = -0.1*joueur->GetDeplacement();
 
 	if (inputs[Keyboard::Space] && joueur->GetIsCanShoot())
 	{
@@ -322,16 +328,11 @@ void Game::update()
 	//mouvement background
 	deplacementBackgroundTotal += deplacementBackgroundX;
 	currentBackground = (int)joueur->getPosition().x/ LARGEUR_BACKGROUND;
-	//test
-	float test;
-	test = joueur->getPosition().x;
-	//test
-	/*if (currentBackground == 2)
-	{
-		test = joueur->getPosition().x;
-	}*/
+	float positionJoueurCalculBackground;
+	positionJoueurCalculBackground = joueur->getPosition().x;
+	
 	//Réapparition Background
-	if(test>=(LARGEUR_BACKGROUND*currentBackground)+(1000+deplacementBackgroundTotal)  && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
+	if(positionJoueurCalculBackground>=(LARGEUR_BACKGROUND*currentBackground)+(1000+deplacementBackgroundTotal)  && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
 	{
 		if(currentBackground%2==0)
 		{
@@ -342,7 +343,7 @@ void Game::update()
 			backgrounds[(currentBackground % 2) - 1]->setPosition((limiteDroite / NB_ESPACE_BACKGROUND)*(currentBackground + 1)+deplacementBackgroundTotal, 0);
 		}
 	}
-	else if(test <= (LARGEUR_BACKGROUND*(currentBackground+2)) - (1000+deplacementBackgroundTotal) && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
+	else if(positionJoueurCalculBackground <= (LARGEUR_BACKGROUND*(currentBackground+2)) - (1000+deplacementBackgroundTotal) && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
 	{
 		if (currentBackground % 2 == 0)
 		{
@@ -382,6 +383,7 @@ void Game::draw()
 	{
 		mainWin->draw(*backgrounds[i]);
 	}
+
 	for (size_t i = 0; i < MAX_TUILES; i++)
 	{
 		if (grilleDeTuiles[i] != nullptr)

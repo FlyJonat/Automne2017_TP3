@@ -6,6 +6,8 @@
 
 using namespace sf;
 
+//Jonathan 1535076 sauf pour IsColliding, Update, Shoot, GetIsCanShoot, variables de temps et d'accélération
+
 namespace sideSpaceShooter
 {
 	class Acteur : public Sprite

@@ -8,6 +8,8 @@
 
 using namespace sf;
 
+
+
 namespace sideSpaceShooter
 {
 	class Game
@@ -81,6 +83,7 @@ namespace sideSpaceShooter
 
 		//Acteur
 		Joueur* joueur;
+		int blocCollisionAvecJoueur;
 
 		vector<Projectile*> projectiles;
 		Animation * animations[NB_SPRITE_SHEET_ANIMATION];
