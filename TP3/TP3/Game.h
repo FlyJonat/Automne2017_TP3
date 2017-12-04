@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Joueur.h"
+#include "EnnemiDeBase.h"
 #include "ProjectileLaser.h"
 #include "ProjectileBouleDeFeu.h"
 #include "ProjectileMissile.h"
@@ -8,7 +9,7 @@
 
 using namespace sf;
 
-
+//Laurent- 1562287
 
 namespace sideSpaceShooter
 {
@@ -39,24 +40,29 @@ namespace sideSpaceShooter
 		static const int LARGEUR_BACKGROUND = 2294;
 		static const int NB_BACKGROUND = 2;
 		static const int NB_ESPACE_BACKGROUND = 5;
-		static const int NB_SPRITE_SHEET_ANIMATION = 6;
+		static const int NB_SPRITE_SHEET_ANIMATION = 13;
 
-		const std::string textureBlocPath = "Ressources\\Sprites\\bloc"; 
+		const std::string textureBlocPath = "Ressources\\Sprites\\bloc";
+
+		static const int NB_COLONES_JOUEUR_ANIMATION = 1;
+		static const int NB_LIGNES_JOUEUR_ANIMATION = 1;
+		static const int NB_ANIMES_JOUEUR_ANIMATION = 1;
+		const std::string textureJoueurPath = "Ressources\\Sprites\\joueur.png";
 		
 		static const int NB_COLONES_LASER_ANIMATION = 1;
 		static const int NB_LIGNES_LASER_ANIMATION = 11;
 		static const int NB_ANIMES_LASER_ANIMATION = 11;
-		const std::string textureLaserPath = "Ressources\\Sprites\\laser_projectiles.png";
+		const std::string textureLaserPath = "Ressources\\Sprites\\projectile_laser.png";
 
 		static const int NB_COLONES_BOULE_DE_FEU_ANIMATION = 6;
 		static const int NB_LIGNES_BOULE_DE_FEU_ANIMATION = 1;
 		static const int NB_ANIMES_BOULE_DE_FEU_ANIMATION = 6;
-		const std::string textureBouleDeFeuPath = "Ressources\\Sprites\\boules_de_feux_projectile.png";
+		const std::string textureBouleDeFeuPath = "Ressources\\Sprites\\projectile_boules_de_feux.png";
 
 		static const int NB_COLONES_MISSILE_ANIMATION = 4;
 		static const int NB_LIGNES_MISSILE_ANIMATION = 2;
 		static const int NB_ANIMES_MISSILE_ANIMATION = 8;
-		const std::string textureMissilePath = "Ressources\\Sprites\\missiles_projectiles.png";
+		const std::string textureMissilePath = "Ressources\\Sprites\\projectile_missiles.png";
 
 		static const int NB_COLONES_EXPLOSION_PROJECTILE_ANIMATION = 4;
 		static const int NB_LIGNES_EXPLOSION_PROJECTILE_ANIMATION = 4;
@@ -85,6 +91,7 @@ namespace sideSpaceShooter
 		Joueur* joueur;
 		int blocCollisionAvecJoueur;
 
+		vector<Ennemi*> Ennemis;
 		vector<Projectile*> projectiles;
 		Animation * animations[NB_SPRITE_SHEET_ANIMATION];
 

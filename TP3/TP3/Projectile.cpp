@@ -4,10 +4,10 @@
 
 using namespace sideSpaceShooter;
 
-Projectile::Projectile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde, Vector2f position, Vector2f direction) : nbAnimation(nbAnimation), vitesseMax(vitesseMax), accelerationParSeconde(accelerationParSeconde), position(position), direction(direction)
+Projectile::Projectile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, Vector2f position, Vector2f direction) : nbAnimation(nbAnimation), position(position), direction(direction)
 {
-	this->animationsProjectilesSprites[moving] = animationProjectileSprite;
-	this->animationsProjectilesSprites[exploding] = animationProjectileExplodingSprite;
+	this->animationsProjectilesSprites[stateProjectileMoving] = animationProjectileSprite;
+	this->animationsProjectilesSprites[stateProjectileExploding] = animationProjectileExplodingSprite;
 	nbFramePourUnCycle = (nbAnimation * timeInFrameForEachAnimations) -1;
 	srand(time(NULL));
 }
@@ -36,7 +36,14 @@ void Projectile::Update()
 /// <param name="fenetre">The fenetre.</param>
 void Projectile::Draw(RenderWindow& fenetre)
 {
+	if (state != stateProjectileDead)
+	{
+		animationsProjectilesSprites[state]->setRotation(rotation);
+		animationsProjectilesSprites[state]->setPosition(position);
+		animationsProjectilesSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
 
+		fenetre.draw(*animationsProjectilesSprites[state]);
+	}
 }
 
 /// <summary>
@@ -48,10 +55,11 @@ void Projectile::Draw(RenderWindow& fenetre)
 /// <returns>
 ///   <c>true</c> if the specified position objet is colliding; otherwise, <c>false</c>.
 /// </returns>
-const bool Projectile::IsColliding(const Vector2f& positionObjet, const int largeurObjet, const int hauteurObjet)
+const bool Projectile::IsColliding(FloatRect objet)
 {
 
-	if ((position.x >= positionObjet.x - (largeurObjet / 2) && position.x <= positionObjet.x + (largeurObjet / 2)) && (position.y >= positionObjet.y - (hauteurObjet / 2) && position.y <= positionObjet.y + (hauteurObjet / 2)))
+	animationsProjectilesSprites[state]->setPosition(position);
+	if (animationsProjectilesSprites[state]->getGlobalBounds().intersects(objet))
 	{
 		return true;
 	}
@@ -63,11 +71,11 @@ const bool Projectile::IsColliding(const Vector2f& positionObjet, const int larg
 /// </summary>
 void Projectile::Exploding()
 {
-	state = exploding;
+	state = stateProjectileExploding;
 	rotation = GetRandomNum(360);
 }
 
-const State Projectile::GetState()
+const StateProjectile Projectile::GetState()
 {
 	return state;
 }

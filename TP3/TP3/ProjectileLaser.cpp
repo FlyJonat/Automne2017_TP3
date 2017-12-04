@@ -4,9 +4,10 @@
 
 using namespace sideSpaceShooter;
 
-ProjectileLaser::ProjectileLaser(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde, Vector2f position, Vector2f direction):  Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, vitesseMax, accelerationParSeconde, position, direction)
+ProjectileLaser::ProjectileLaser(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, Vector2f position, Vector2f direction):  Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, position, direction)
 {
-
+	vitesseMax = 60;
+	accelerationParSeconde = 60;
 }
 
 
@@ -17,7 +18,7 @@ ProjectileLaser::~ProjectileLaser()
 
 void ProjectileLaser::Update()
 {
-	if (state == moving)
+	if (state == stateProjectileMoving)
 	{
 		velocity.x += direction.x * (accelerationParSeconde / 60);
 		velocity.y += direction.y * (accelerationParSeconde / 60);
@@ -57,7 +58,7 @@ void ProjectileLaser::UpdateAnimation()
 	}
 	++nbFrameFromBeginAnimation;
 
-	if (state == moving)
+	if (state == stateProjectileMoving)
 	{
 		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
 
@@ -66,30 +67,14 @@ void ProjectileLaser::UpdateAnimation()
 			nbFrameFromBeginAnimation = 0;
 		}
 	}
-	else if (state == exploding)
+	else if (state == stateProjectileExploding)
 	{
 		currentAnimationNumber = floor(nbFrameFromBeginAnimation / 3);
 
 		if (nbFrameFromBeginAnimation >= 47)
 		{
-			state = dead;
+			state = stateProjectileDead;
 		}
 	}
-}
-
-/// <summary>
-/// Draws the specified fenetre.
-/// </summary>
-/// <param name="fenetre">The fenetre.</param>
-void ProjectileLaser::Draw(RenderWindow& fenetre)
-{
-	if (state != dead)
-	{
-		animationsProjectilesSprites[state]->setPosition(position);
-		animationsProjectilesSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
-
-		fenetre.draw(*animationsProjectilesSprites[state]);
-	}
-	
 }
 

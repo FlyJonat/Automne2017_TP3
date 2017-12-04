@@ -9,7 +9,7 @@
 using namespace sf;
 using namespace std;
 
-enum State { moving, exploding, dead };
+enum StateProjectile { stateProjectileMoving, stateProjectileExploding, stateProjectileDead };
 
 //Laurent- 1562287
 
@@ -18,29 +18,28 @@ namespace sideSpaceShooter
 	class Projectile : public Sprite
 	{
 	public:
-		Projectile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde, Vector2f position, Vector2f direction);
+		Projectile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, Vector2f position, Vector2f direction);
 		void setPosition(const Vector2f& position);
 		virtual void Update();
-		virtual void Draw(RenderWindow& fenetre);
-		const bool IsColliding(const Vector2f& positionObjet, const int largeurObjet, const int hauteurObjet);
+		void Draw(RenderWindow& fenetre);
+		const bool IsColliding(FloatRect objet);
 		void Exploding();
-		const State GetState();
+		const StateProjectile GetState();
 
 	protected:
 		int GetRandomNum(int max);
 		int nbFrameFromBeginAnimation = 0;
-		int currentAnimationNumber = 0;
-		int nbAnimation = 0;
+		int currentAnimationNumber = 0;	
 		int nbFramePourUnCycle = 0;
+		int nbAnimation = 0;
 		int timeInFrameForEachAnimations = 6;
 		float vitesseMax = 0;
 		float accelerationParSeconde = 0;
 		float rotation = 0;
-		bool haveToDie = false;
 	
 
-		State state = moving; //Etat actuel du projectile.
-		State previousState = moving; //Etat precedant du projectile.
+		StateProjectile state = stateProjectileMoving; //Etat actuel du projectile.
+		StateProjectile previousState = stateProjectileMoving; //Etat precedant du projectile.
 
 		Vector2f direction;
 		Vector2f velocity;

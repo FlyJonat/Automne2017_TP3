@@ -3,27 +3,18 @@
 using namespace sideSpaceShooter;
 using namespace std;
 
-Acteur::Acteur(std::string texturePath):velocity(0,0)
+//Laurent- 1562287
+
+Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, ActeurType ACTEUR_TYPE, Vector2f position) : ACTEUR_TYPE(ACTEUR_TYPE), position(position)
 {
-	this->texturePath = texturePath;
+	this->animationsActeurSprites[stateActeurALife] = animationActeurSprite;
+	this->animationsActeurSprites[stateActeurExploding] = animationActeurExplodingSprite;
+	srand(time(NULL));
 }
+
 Acteur::~Acteur()
 {
 
-}
-bool Acteur::init(float limiteGauche, float limiteDroite,float limiteHaut, float limiteBas)
-{
-	if(!acteurSpriteT.loadFromFile(texturePath))
-	{
-		return false;
-	}
-	setTexture(acteurSpriteT);
-	setOrigin(acteurSpriteT.getSize().x / 2, acteurSpriteT.getSize().y / 2);
-	this->limiteGauche = limiteGauche;
-	this->limiteDroite = limiteDroite;
-	this->limiteHaut = limiteHaut;
-	this->limiteBas = limiteBas;
-	return true;
 }
 
 void Acteur::Update()
@@ -34,30 +25,50 @@ void Acteur::Update()
 	}
 	else
 	{
-		isCanShoot = true;
+		readyToAttack = true;
+	}
+	UpdateAnimation();
+}
+
+void Acteur::UpdateAnimation()
+{
+	if (state != stateActeurExploding && state != stateActeurDead)
+	{
+		currentAnimationNumber = 0;
+	}
+	else
+	{
+		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
+
+		if (nbFrameFromBeginAnimation >= nbFramePourUnCycle)
+		{
+			state = stateActeurDead;
+		}
+		++nbFrameFromBeginAnimation;
 	}
 }
+
+/// <summary>
+/// Draws the specified fenetre.
+/// </summary>
+/// <param name="fenetre">The fenetre.</param>
+void Acteur::Draw(RenderWindow& fenetre)
+{
+	if (state != stateActeurDead)
+	{
+		animationsActeurSprites[state]->setRotation(rotation);
+		animationsActeurSprites[state]->setPosition(position);
+		animationsActeurSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
+
+		fenetre.draw(*animationsActeurSprites[state]);
+	}
+
+}
+
 void Acteur::Move(const Vector2f direction)
 {
 	float directionX = direction.x;
 	float directionY = direction.y;
-	//Test sur les limites de l'écran
-	if (getPosition().x < limiteGauche)
-	{
-		setPosition(limiteGauche, getPosition().y);
-	}
-	else if (getPosition().x + getGlobalBounds().width > limiteDroite)
-	{
-		setPosition(limiteDroite - getGlobalBounds().width, getPosition().y);
-	}
-	if (getPosition().x < limiteHaut)
-	{
-		setPosition(getPosition().x, limiteHaut);
-	}
-	else if (getPosition().y + getGlobalBounds().height > limiteBas)
-	{
-		setPosition(getPosition().x, limiteBas - getGlobalBounds().height);
-	}
 
 
 	if (directionX != 0)
@@ -95,7 +106,8 @@ void Acteur::Move(const Vector2f direction)
 	{
 		velocity.y = -vitesseMax;
 	}
-	Sprite::move(velocity);
+	position.x += velocity.x;
+	position.y += velocity.y;
 }
 
 /// <summary>
@@ -107,48 +119,61 @@ void Acteur::Move(const Vector2f direction)
 /// </returns>
 bool Acteur::IsColliding(FloatRect objet)
 {
-	if (Sprite::getGlobalBounds().intersects(objet))
+	animationsActeurSprites[state]->setPosition(position);
+
+	if (animationsActeurSprites[state]->getGlobalBounds().intersects(objet))
 	{
 		//Colision avec le planché
-		if (((getPosition().y + getOrigin().y) - (objet.top)) <= 30 && ((getPosition().y + getOrigin().y) - (objet.top) >= -30))
+		if (((animationsActeurSprites[state]->getPosition().y + animationsActeurSprites[state]->getOrigin().y) - (objet.top)) <= 30 && ((animationsActeurSprites[state]->getPosition().y + animationsActeurSprites[state]->getOrigin().y) - (objet.top) >= -30))
 		{
 			velocity.y *= -1;
-			Sprite::move(0,-((getPosition().y + getOrigin().y) - (objet.top)));
+			animationsActeurSprites[state]->move(0,-((animationsActeurSprites[state]->getPosition().y + animationsActeurSprites[state]->getOrigin().y) - (objet.top)));
 		}
 
 		//Colision avec le plafond
 	
-		else if (((getPosition().y - getOrigin().y) - (objet.top + objet.height) <= 30) && ((getPosition().y - getOrigin().y) - (objet.top + objet.height) >= -30))
+		else if (((animationsActeurSprites[state]->getPosition().y - animationsActeurSprites[state]->getOrigin().y) - (objet.top + objet.height) <= 30) && ((animationsActeurSprites[state]->getPosition().y - animationsActeurSprites[state]->getOrigin().y) - (objet.top + objet.height) >= -30))
 		{
 			velocity.y *= -1;
-			Sprite::move(0, -((getPosition().y - getOrigin().y) - (objet.top + objet.height)));
+			animationsActeurSprites[state]->move(0, -((animationsActeurSprites[state]->getPosition().y - animationsActeurSprites[state]->getOrigin().y) - (objet.top + objet.height)));
 		}
 
 		//Colision avec le coté droit
-		else if (getPosition().x + getOrigin().x - objet.left <= 30 && getPosition().x + getOrigin().x - objet.left >= -30)
+		else if (animationsActeurSprites[state]->getPosition().x + animationsActeurSprites[state]->getOrigin().x - objet.left <= 30 && animationsActeurSprites[state]->getPosition().x + animationsActeurSprites[state]->getOrigin().x - objet.left >= -30)
 		{
 			velocity.x *= -1;
-			Sprite::move(-(getPosition().x + getOrigin().x - objet.left), 0);
+			animationsActeurSprites[state]->move(-(animationsActeurSprites[state]->getPosition().x + animationsActeurSprites[state]->getOrigin().x - objet.left), 0);
 		}
 
 		//Colision avec le coté gauche	
-		else if (getPosition().x - getOrigin().x - objet.left - objet.width <= 30 && getPosition().x - getOrigin().x - objet.left - objet.width >= -30)
+		else if (animationsActeurSprites[state]->getPosition().x - animationsActeurSprites[state]->getOrigin().x - objet.left - objet.width <= 30 && animationsActeurSprites[state]->getPosition().x - animationsActeurSprites[state]->getOrigin().x - objet.left - objet.width >= -30)
 		{
 			velocity.x *= -1;
-			Sprite::move(-(getPosition().x - getOrigin().x - objet.left - objet.width), 0);
+			animationsActeurSprites[state]->move(-(animationsActeurSprites[state]->getPosition().x - animationsActeurSprites[state]->getOrigin().x - objet.left - objet.width), 0);
 		}
 		return true;
 	}
 	return false;
 }
 
+const StateActeur Acteur::GetState()
+{
+	return state;
+}
+
+
 void Acteur::Shoot()
 {
-	isCanShoot = false;
+	readyToAttack = false;
 	tempsDeRecharge = tempsEnFrameEntreDeuxTires;
 }
 
-const bool Acteur::GetIsCanShoot()
+const bool Acteur::GetReadyToAttack() const
 {
-	return isCanShoot;
+	return readyToAttack;
+}
+
+const Vector2f Acteur::GetPosition()
+{
+	return position;
 }

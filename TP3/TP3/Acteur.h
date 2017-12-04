@@ -1,46 +1,61 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <stdexcept>
 #include <string>
 #include <math.h>
+#include "Animation.h"
 
+enum StateActeur{ stateActeurALife, stateActeurExploding, stateActeurDead };
+enum ActeurType { acteurTypeOther, acteurTypeRandom, acteurTypePlayer, acteurTypeEnnemiDeBase, acteurTypeKamikaze, acteurTypeTurret, acteurTypeLanceurMissile, acteurTypeCarrier, acteurTypeBoss };
 using namespace sf;
 
+//Laurent- 1562287
 //Jonathan 1535076 sauf pour IsColliding, Update, Shoot, GetIsCanShoot, variables de temps et d'accélération
 
 namespace sideSpaceShooter
 {
-	class Acteur : public Sprite
+	class Acteur
 	{
-		Texture acteurSpriteT;
-		std::string texturePath;
 
 	public:
-		Acteur(std::string texturePath);
+		Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, ActeurType ACTEUR_TYPE, Vector2f position);
 		~Acteur();
-		bool init(float limiteGauche, float limiteDroite, float limiteHaut, float limiteBas);
-		bool IsColliding(FloatRect objet);
-		void Move(const Vector2f direction);
 
 		void Update();
+		void UpdateAnimation();
+		void Draw(RenderWindow& fenetre);
+		void Move(const Vector2f direction);
+		bool IsColliding(FloatRect objet);
+		const StateActeur GetState();
 		void Shoot();
-		const bool GetIsCanShoot();
-
+		const bool GetReadyToAttack() const;
+		const Vector2f GetPosition();
 	protected:
-		bool isCanShoot = true;
+		bool readyToAttack = true;
 		
-		int tempsEnFrameEntreDeuxTires = 15;
+		int tempsEnFrameEntreDeuxTires = 0;
 		int tempsDeRecharge = 0;
 
-		float vitesseMax = 10;
-		float accelerationParSeconde = 5;
-		float autoDeccelerationParSeconde = 1.0;		
-		float limiteDroite;
-		float limiteGauche;
-		float limiteHaut;
-		float limiteBas;
+		int nbFrameFromBeginAnimation = 0;
+		int currentAnimationNumber = 0;
+		int timeInFrameForEachAnimations = 3;
+		int nbAnimationExplosion = 12;
+		int nbFramePourUnCycle = (timeInFrameForEachAnimations * nbAnimationExplosion)-1;
 
+		float vitesseMax = 0;
+		float accelerationParSeconde = 0;
+		float autoDeccelerationParSeconde = 1.0;		
+		float rotation = 0;
+
+		const ActeurType ACTEUR_TYPE;
+
+		StateActeur state = stateActeurALife; //Etat actuel de l'ennemi.
+		StateActeur previousState = stateActeurALife; //Etat precedant de l'ennemi.
+
+		Vector2f direction;
 		Vector2f velocity;
+		Vector2f position;
+
+		Animation * animationsActeurSprites[2];
 
 	};
 }

@@ -4,9 +4,10 @@
 
 using namespace sideSpaceShooter;
 
-ProjectileMissile::ProjectileMissile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, float vitesseMax, float accelerationParSeconde,  Vector2f position, Vector2f direction) : Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, vitesseMax, accelerationParSeconde, position, direction)
+ProjectileMissile::ProjectileMissile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation,  Vector2f position, Vector2f direction) : Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, position, direction)
 {
-
+	vitesseMax = 6;
+	accelerationParSeconde = 6;
 }
 
 
@@ -17,7 +18,7 @@ ProjectileMissile::~ProjectileMissile()
 
 void ProjectileMissile::Update()
 {
-	if (state == moving)
+	if (state == stateProjectileMoving)
 	{
 		if (remainingTimeBeforeChangeDirection <= 0)
 		{
@@ -77,7 +78,7 @@ void ProjectileMissile::UpdateAnimation()
 	}
 	++nbFrameFromBeginAnimation;
 
-	if (state == moving)
+	if (state == stateProjectileMoving)
 	{
 		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
 
@@ -86,34 +87,13 @@ void ProjectileMissile::UpdateAnimation()
 			nbFrameFromBeginAnimation = 24;
 		}
 	}
-	else if (state == exploding)
+	else if (state == stateProjectileExploding)
 	{
 		currentAnimationNumber = floor(nbFrameFromBeginAnimation / 3);
 
 		if (nbFrameFromBeginAnimation >= 47)
 		{
-			state = dead;
+			state = stateProjectileDead;
 		}
 	}
 }
-
-/// <summary>
-/// Draws the specified fenetre.
-/// </summary>
-/// <param name="fenetre">The fenetre.</param>
-void ProjectileMissile::Draw(RenderWindow& fenetre)
-{
-	if (state != dead)
-	{
-		if (state == moving)
-		{
-			animationsProjectilesSprites[state]->setRotation(rotation);
-		}
-		animationsProjectilesSprites[state]->setPosition(position);
-		animationsProjectilesSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
-
-		fenetre.draw(*animationsProjectilesSprites[state]);
-	}
-
-}
-
