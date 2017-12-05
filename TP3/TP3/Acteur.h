@@ -17,7 +17,7 @@ namespace sideSpaceShooter
 	{
 
 	public:
-		Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, ActeurType ACTEUR_TYPE, Vector2f position);
+		Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position);
 		~Acteur();
 
 		void Update();
@@ -46,7 +46,7 @@ namespace sideSpaceShooter
 		float autoDeccelerationParSeconde = 1.0;		
 		float rotation = 0;
 
-		const ActeurType ACTEUR_TYPE;
+		ActeurType acteurType;
 
 		StateActeur state = stateActeurALife; //Etat actuel de l'ennemi.
 		StateActeur previousState = stateActeurALife; //Etat precedant de l'ennemi.
@@ -54,6 +54,7 @@ namespace sideSpaceShooter
 		Vector2f direction;
 		Vector2f velocity;
 		Vector2f position;
+		Vector2f originOffset;
 
 		Animation * animationsActeurSprites[2];
 

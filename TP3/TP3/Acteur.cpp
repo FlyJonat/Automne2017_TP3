@@ -1,14 +1,16 @@
-#include "Acteur.h"
+	#include "Acteur.h"
 
 using namespace sideSpaceShooter;
 using namespace std;
 
 //Laurent- 1562287
 
-Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, ActeurType ACTEUR_TYPE, Vector2f position) : ACTEUR_TYPE(ACTEUR_TYPE), position(position)
+Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position) : position(position)
 {
 	this->animationsActeurSprites[stateActeurALife] = animationActeurSprite;
 	this->animationsActeurSprites[stateActeurExploding] = animationActeurExplodingSprite;
+
+	originOffset = animationsActeurSprites[stateActeurALife]->getOrigin();
 	srand(time(NULL));
 }
 
@@ -124,33 +126,33 @@ bool Acteur::IsColliding(FloatRect objet)
 	if (animationsActeurSprites[state]->getGlobalBounds().intersects(objet))
 	{
 		//Colision avec le planché
-		if (((animationsActeurSprites[state]->getPosition().y + animationsActeurSprites[state]->getOrigin().y) - (objet.top)) <= 30 && ((animationsActeurSprites[state]->getPosition().y + animationsActeurSprites[state]->getOrigin().y) - (objet.top) >= -30))
+		if (((position.y + originOffset.y) - (objet.top)) >= 0 && ((position.y + originOffset.y) - (objet.top) <= 30))
 		{
 			velocity.y *= -1;
-			animationsActeurSprites[state]->move(0,-((animationsActeurSprites[state]->getPosition().y + animationsActeurSprites[state]->getOrigin().y) - (objet.top)));
+			position.y += -((position.y + originOffset.y) - (objet.top));
 		}
 
 		//Colision avec le plafond
-	
-		else if (((animationsActeurSprites[state]->getPosition().y - animationsActeurSprites[state]->getOrigin().y) - (objet.top + objet.height) <= 30) && ((animationsActeurSprites[state]->getPosition().y - animationsActeurSprites[state]->getOrigin().y) - (objet.top + objet.height) >= -30))
+		else if (((position.y - originOffset.y) - (objet.top + objet.height) <= 0) && ((position.y - originOffset.y) - (objet.top + objet.height) >= -30))
 		{
 			velocity.y *= -1;
-			animationsActeurSprites[state]->move(0, -((animationsActeurSprites[state]->getPosition().y - animationsActeurSprites[state]->getOrigin().y) - (objet.top + objet.height)));
+			position.y += -((position.y - originOffset.y) - (objet.top + objet.height));
 		}
 
 		//Colision avec le coté droit
-		else if (animationsActeurSprites[state]->getPosition().x + animationsActeurSprites[state]->getOrigin().x - objet.left <= 30 && animationsActeurSprites[state]->getPosition().x + animationsActeurSprites[state]->getOrigin().x - objet.left >= -30)
+		else if (position.x + originOffset.x - objet.left >= 0 && position.x + originOffset.x - objet.left <= 30)
 		{
 			velocity.x *= -1;
-			animationsActeurSprites[state]->move(-(animationsActeurSprites[state]->getPosition().x + animationsActeurSprites[state]->getOrigin().x - objet.left), 0);
+			position.x += -(position.x + originOffset.x - objet.left);
 		}
 
 		//Colision avec le coté gauche	
-		else if (animationsActeurSprites[state]->getPosition().x - animationsActeurSprites[state]->getOrigin().x - objet.left - objet.width <= 30 && animationsActeurSprites[state]->getPosition().x - animationsActeurSprites[state]->getOrigin().x - objet.left - objet.width >= -30)
+		else if ((position.x - originOffset.x) - (objet.left + objet.width) <= 0 && (position.x - originOffset.x) - (objet.left - objet.width) >= -30)
 		{
 			velocity.x *= -1;
-			animationsActeurSprites[state]->move(-(animationsActeurSprites[state]->getPosition().x - animationsActeurSprites[state]->getOrigin().x - objet.left - objet.width), 0);
+			position.x += -((position.x - originOffset.x) - (objet.left + objet.width));
 		}
+		animationsActeurSprites[state]->setPosition(position);
 		return true;
 	}
 	return false;

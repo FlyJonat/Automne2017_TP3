@@ -48,6 +48,11 @@ namespace sideSpaceShooter
 		static const int NB_LIGNES_JOUEUR_ANIMATION = 1;
 		static const int NB_ANIMES_JOUEUR_ANIMATION = 1;
 		const std::string textureJoueurPath = "Ressources\\Sprites\\joueur.png";
+
+		static const int NB_COLONES_ENNEMI_DE_BASE_ANIMATION = 1;
+		static const int NB_LIGNES_ENNEMI_DE_BASE_ANIMATION = 1;
+		static const int NB_ANIMES_ENNEMI_DE_BASE_ANIMATION = 1;
+		const std::string textureEnnemiDeBasePath = "Ressources\\Sprites\\ennemi_de_base.png";
 		
 		static const int NB_COLONES_LASER_ANIMATION = 1;
 		static const int NB_LIGNES_LASER_ANIMATION = 11;
@@ -91,7 +96,8 @@ namespace sideSpaceShooter
 		Joueur* joueur;
 		int blocCollisionAvecJoueur;
 
-		vector<Ennemi*> Ennemis;
+		Ennemi*  ennemi;
+		vector<Ennemi*> ennemis;
 		vector<Projectile*> projectiles;
 		Animation * animations[NB_SPRITE_SHEET_ANIMATION];
 

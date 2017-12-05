@@ -4,8 +4,10 @@
 
 using namespace sideSpaceShooter;
 
-EnnemiDeBase::EnnemiDeBase(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, const int SCORE_VALUE, ActeurType ACTEUR_TYPE, Vector2f position) : Ennemi(animationProjectileSprite, animationProjectileExplodingSprite, SCORE_VALUE, ACTEUR_TYPE, position)
+EnnemiDeBase::EnnemiDeBase(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, Vector2f position) : Ennemi(animationProjectileSprite, animationProjectileExplodingSprite, position)
 {
+	scoreValue = 10;
+	acteurType = acteurTypeEnnemiDeBase;
 	vitesseMax = 6;
 	accelerationParSeconde = 6;
 	tempsEnFrameEntreDeuxTires = 60;
@@ -16,9 +18,16 @@ EnnemiDeBase::~EnnemiDeBase()
 
 }
 
-void EnnemiDeBase::Update()
+void EnnemiDeBase::Update(Vector2f playerPosition)
 {
-	
-
+	Acteur::Update();
+	if (Ennemi::LookForPlayer(playerPosition))
+	{
+		wantToAttack = true;
+	}
+	else
+	{
+		wantToAttack = false;
+	}
 }
 

@@ -28,17 +28,21 @@ Game::~Game()
 	{
 		delete animations[i];
 	}
-	for (size_t i = 0; i < NB_BACKGROUND; i++)
+	for (size_t i = 0; i < NB_BACKGROUND; ++i)
 	{
 		delete backgrounds[i];
 	}
-	for (size_t i = 0; i < MAX_TUILES; i++)
+	for (size_t i = 0; i < MAX_TUILES; ++i)
 	{
 		delete grilleDeTuiles[i];
 	}
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
 		delete projectiles[i];
+	}
+	for (size_t i = 0; i < ennemis.size(); ++i)
+	{
+		delete ennemis[i];
 	}
 }
 int Game::testTest()
@@ -77,6 +81,12 @@ bool Game::init()
 		return false;
 	}
 	
+	animations[animationEnnemiDeBase] = new Animation(NB_COLONES_ENNEMI_DE_BASE_ANIMATION, NB_LIGNES_ENNEMI_DE_BASE_ANIMATION, NB_ANIMES_ENNEMI_DE_BASE_ANIMATION);
+	if (!animations[animationEnnemiDeBase]->init(textureEnnemiDeBasePath))
+	{
+		return false;
+	}
+
 	animations[animationLaser] = new Animation(NB_COLONES_LASER_ANIMATION, NB_LIGNES_LASER_ANIMATION, NB_ANIMES_LASER_ANIMATION);
 	if (!animations[animationLaser]->init(textureLaserPath))
 	{
@@ -139,32 +149,26 @@ bool Game::init()
 				case 49: // Joueur
 					position.x = (i * TAILLE_TUILES_X);
 					position.y = (levelLine * TAILLE_TUILES_Y);
-					joueur = new Joueur(animations[animationJoueur], animations[animationProjectileExplosion], acteurTypePlayer, position);
+					joueur = new Joueur(animations[animationJoueur], animations[animationProjectileExplosion], position);
 					break;
-				case 50: // Sol
+				case 50: // Obstacle
 					numRandom = rand() % NB_TUILES_METALIQUE;
 					grilleDeTuiles[numTuile] = new Sprite(tuilesMetaliquesT[numRandom]);
 					grilleDeTuiles[numTuile]->setPosition(i * TAILLE_TUILES_X, levelLine* TAILLE_TUILES_Y);
 					grilleDeTuiles[numTuile]->setOrigin(tuilesMetaliquesT[numRandom].getSize().x / 2, tuilesMetaliquesT[numRandom].getSize().y / 2);
 					++numTuile;
 					break;
-				case 51: // Plateforme
+				case 51: // 
 					break;
-				case 52: // Ennemi 0
-
+				case 97: // Ennemi de base
+					position.x = (i * TAILLE_TUILES_X);
+					position.y = (levelLine * TAILLE_TUILES_Y);
+					
+					ennemi = new EnnemiDeBase(animations[animationEnnemiDeBase], animations[animationProjectileExplosion], position);
+					ennemis.push_back(ennemi);
+					
 					break;
-				case 53: // Ennemi 1
-
-					break;
-				case 54: // Ennemi 2
-
-					break;
-				case 55: // Bouffe
-
-					break;
-				case 56: // SortieF
-
-					break;
+				
 				default:
 					break;
 				}
@@ -277,8 +281,8 @@ void Game::update()
 		positionProjectile.x = joueur->GetPosition().x;
 		positionProjectile.y = joueur->GetPosition().y;
 		//Création du projectile
-		//Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11,  positionProjectile, directionProjectile);
-		//projectiles.push_back(p);
+		Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11,  positionProjectile, directionProjectile);
+		projectiles.push_back(p);
 
 		/*Projectile* a = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, positionProjectile, directionProjectile);
 		projectiles.push_back(a);
@@ -289,10 +293,43 @@ void Game::update()
 		Projectile* c = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, positionProjectile, directionProjectile);		
 		projectiles.push_back(c);*/
 
-		Projectile* d = new ProjectileMissile(animations[animationMissile], animations[animationProjectileExplosion], 8, positionProjectile, directionProjectile);
-		projectiles.push_back(d);
+		/*Projectile* d = new ProjectileMissile(animations[animationMissile], animations[animationProjectileExplosion], 8, positionProjectile, directionProjectile);
+		projectiles.push_back(d);*/
 
 	}
+
+	//Vérifie la collision entre un projectile et une tuile.
+	for (size_t i = 0; i < ennemis.size(); ++i)
+	{
+		if (ennemis[i]->GetState() == stateActeurALife)
+		{
+			//for (size_t j = 0; j < MAX_TUILES; ++j)
+			//{
+			//	if (grilleDeTuiles[j] != nullptr)
+			//	{
+			//		//Détruit le projectile en cas de collision.
+			//		if (ennemis[i]->IsColliding(grilleDeTuiles[j]->getGlobalBounds()))
+			//		{
+			//			break;
+			//		}
+			//	}
+			//}
+			ennemis[i]->Update(joueur->GetPosition());
+			if (ennemis[i]->GetReadyToAttack() && ennemis[i]->GetWantToAttack())
+			{
+				Vector2f directionProjectile;
+				directionProjectile.x = -1;
+				directionProjectile.y = 0;
+				Vector2f positionProjectile;
+				positionProjectile.x = ennemis[i]->GetPosition().x;
+				positionProjectile.y = ennemis[i]->GetPosition().y;
+				Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11, positionProjectile, directionProjectile);
+				projectiles.push_back(p);
+				ennemis[i]->Shoot();
+			}
+		}
+	}
+
 	//Vérifie la collision entre un projectile et une tuile.
 	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
@@ -393,6 +430,10 @@ void Game::draw()
 	}
 
 	joueur->Draw(*mainWin);
+	for (size_t i = 0; i < ennemis.size(); i++)
+	{
+		ennemis[i]->Draw(*mainWin);
+	}
 	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		projectiles[i]->Draw(*mainWin);

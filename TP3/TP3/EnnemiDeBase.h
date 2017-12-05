@@ -9,13 +9,13 @@ namespace sideSpaceShooter
 	class EnnemiDeBase : public Ennemi
 	{
 	public:
-		EnnemiDeBase(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, const int SCORE_VALUE, ActeurType ACTEUR_TYPE, Vector2f position);
+		EnnemiDeBase(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position);
 		~EnnemiDeBase();
 
 		
 
 	protected:
-		void Update();
+		void Update(Vector2f playerPosition);
 
 	};
 }

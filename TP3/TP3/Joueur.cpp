@@ -2,8 +2,9 @@
 using namespace sideSpaceShooter;
 
 
-Joueur::Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, ActeurType ACTEUR_TYPE, Vector2f position):Acteur(animationActeurSprite, animationActeurExplodingSprite, ACTEUR_TYPE, position)
+Joueur::Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position):Acteur(animationActeurSprite, animationActeurExplodingSprite, position)
 {
+	acteurType = acteurTypePlayer;
 	vitesseMax = 6;
 	accelerationParSeconde = 6;
 	tempsEnFrameEntreDeuxTires = 15;

@@ -7,7 +7,7 @@ namespace sideSpaceShooter
 	class Joueur :public Acteur
 	{
 	public:
-		Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, ActeurType ACTEUR_TYPE, Vector2f position);
+		Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position);
 		~Joueur();
 		const int GetNextShotOffset();
 		float GetDeplacement();
