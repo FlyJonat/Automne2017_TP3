@@ -12,6 +12,8 @@ Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExp
 
 	originOffset = animationsActeurSprites[stateActeurALife]->getOrigin();
 	srand(time(NULL));
+
+	life = 1;
 }
 
 Acteur::~Acteur()
@@ -178,4 +180,8 @@ const bool Acteur::GetReadyToAttack() const
 const Vector2f Acteur::GetPosition()
 {
 	return position;
+}
+int Acteur::GetLifeInfo()
+{
+	return life;
 }

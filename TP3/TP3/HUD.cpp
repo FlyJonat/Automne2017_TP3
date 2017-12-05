@@ -18,6 +18,10 @@ void HUD::init()
 }
 void HUD::ShowPlayerLife(Joueur joueur)
 {
-	playerLife = joueur.GetLife();
+	playerLife = joueur.GetLifeInfo();
 	textPlayerLife.setString(playerLife);
+}
+Text HUD::GetText()
+{
+	return textPlayerLife;
 }

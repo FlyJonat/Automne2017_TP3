@@ -13,6 +13,7 @@ namespace sideSpaceShooter
 		void init();
 		void ShowPlayerLife(Joueur joueur);
 		void Draw();
+		Text GetText();
 	private:
 		string playerLife;
 		Text textPlayerLife;

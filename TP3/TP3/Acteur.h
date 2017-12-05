@@ -29,6 +29,7 @@ namespace sideSpaceShooter
 		void Shoot();
 		const bool GetReadyToAttack() const;
 		const Vector2f GetPosition();
+		int GetLifeInfo();
 	protected:
 		bool readyToAttack = true;
 		
@@ -58,5 +59,6 @@ namespace sideSpaceShooter
 
 		Animation * animationsActeurSprites[2];
 
+		int life;
 	};
 }
