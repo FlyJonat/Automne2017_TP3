@@ -89,20 +89,40 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Acteur.cpp" />
+    <ClCompile Include="AnimationProjectileLaser.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Joueur.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileLaser.cpp" />
     <ClCompile Include="Testeur.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Acteur.h" />
+    <ClInclude Include="AnimationProjectileLaser.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Joueur.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileLaser.h" />
     <ClInclude Include="Testeur.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Ressources\Backgrounds\background.png" />
+    <Image Include="Ressources\Sprites\bloc_grille.png" />
+    <Image Include="Ressources\Sprites\bloc_metal.png" />
+    <Image Include="Ressources\Sprites\boss.png" />
+    <Image Include="Ressources\Sprites\carrier.png" />
+    <Image Include="Ressources\Sprites\drawn-explosion-sprite-3.png" />
+    <Image Include="Ressources\Sprites\ennemi_normaux.png" />
+    <Image Include="Ressources\Sprites\exp2.png" />
+    <Image Include="Ressources\Sprites\explosjon_missiles.png" />
     <Image Include="Ressources\Sprites\joueur.png" />
+    <Image Include="Ressources\Sprites\kamikaze.png" />
+    <Image Include="Ressources\Sprites\laser_projectiles.png" />
+    <Image Include="Ressources\Sprites\missiles.png" />
+    <Image Include="Ressources\Sprites\missiles_projectiles.png" />
+    <Image Include="Ressources\Sprites\shotgun_projectiles.png" />
+    <Image Include="Ressources\Sprites\turret.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

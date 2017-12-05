@@ -36,6 +36,15 @@
     <ClCompile Include="Joueur.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationProjectileLaser.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileLaser.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -50,12 +59,63 @@
     <ClInclude Include="Joueur.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationProjectileLaser.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileLaser.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Ressources\Backgrounds\background.png">
       <Filter>Fichiers de ressources\Backgrounds</Filter>
     </Image>
     <Image Include="Ressources\Sprites\joueur.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\bloc_grille.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\bloc_metal.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\boss.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\carrier.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\drawn-explosion-sprite-3.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\ennemi_normaux.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\exp2.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\explosjon_missiles.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\kamikaze.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\laser_projectiles.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\missiles.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\missiles_projectiles.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\shotgun_projectiles.png">
+      <Filter>Fichiers de ressources\Sprites</Filter>
+    </Image>
+    <Image Include="Ressources\Sprites\turret.png">
       <Filter>Fichiers de ressources\Sprites</Filter>
     </Image>
   </ItemGroup>
