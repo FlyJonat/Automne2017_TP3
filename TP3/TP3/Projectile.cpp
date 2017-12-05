@@ -4,9 +4,12 @@
 
 using namespace sideSpaceShooter;
 
-Projectile::Projectile(int nbAnimation, float vitesseMax, float accelerationParSeconde, Vector2f position, Vector2f direction) : nbAnimation(nbAnimation), vitesseMax(vitesseMax), accelerationParSeconde(accelerationParSeconde), position(position), direction(direction)
+Projectile::Projectile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, Vector2f position, Vector2f direction) : nbAnimation(nbAnimation), position(position), direction(direction)
 {
-
+	this->animationsProjectilesSprites[stateProjectileMoving] = animationProjectileSprite;
+	this->animationsProjectilesSprites[stateProjectileExploding] = animationProjectileExplodingSprite;
+	nbFramePourUnCycle = (nbAnimation * timeInFrameForEachAnimations) -1;
+	srand(time(NULL));
 }
 
 
@@ -33,7 +36,14 @@ void Projectile::Update()
 /// <param name="fenetre">The fenetre.</param>
 void Projectile::Draw(RenderWindow& fenetre)
 {
+	if (state != stateProjectileDead)
+	{
+		animationsProjectilesSprites[state]->setRotation(rotation);
+		animationsProjectilesSprites[state]->setPosition(position);
+		animationsProjectilesSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
 
+		fenetre.draw(*animationsProjectilesSprites[state]);
+	}
 }
 
 /// <summary>
@@ -45,10 +55,11 @@ void Projectile::Draw(RenderWindow& fenetre)
 /// <returns>
 ///   <c>true</c> if the specified position objet is colliding; otherwise, <c>false</c>.
 /// </returns>
-bool Projectile::IsColliding(const Vector2f& positionObjet, const int largeurObjet, const int hauteurObjet)
+const bool Projectile::IsColliding(FloatRect objet)
 {
 
-	if ((position.x >= positionObjet.x - (largeurObjet / 2) && position.x <= positionObjet.x + (largeurObjet / 2)) && (position.y >= positionObjet.y - (hauteurObjet / 2) && position.y <= positionObjet.y + (hauteurObjet / 2)))
+	animationsProjectilesSprites[state]->setPosition(position);
+	if (animationsProjectilesSprites[state]->getGlobalBounds().intersects(objet))
 	{
 		return true;
 	}
@@ -58,15 +69,19 @@ bool Projectile::IsColliding(const Vector2f& positionObjet, const int largeurObj
 /// <summary>
 /// Haves to die.
 /// </summary>
-void Projectile::HaveToDie()
+void Projectile::Exploding()
 {
-	haveToDie = true;
+	state = stateProjectileExploding;
+	rotation = GetRandomNum(360);
 }
-/// <summary>
-/// Gets the have to die.
-/// </summary>
-/// <returns></returns>
-bool Projectile::GetHaveToDie()
+
+const StateProjectile Projectile::GetState()
 {
-	return haveToDie;
+	return state;
+}
+
+int Projectile::GetRandomNum(int max)
+{
+	int numRandom = 0;
+	return numRandom = rand() % max;
 }

@@ -10,37 +10,28 @@ using namespace sf;
 
 namespace sideSpaceShooter
 {
-	class Acteur : public Sprite
 	{
-		Texture acteurSpriteT;
-		std::string texturePath;
 
 	public:
-		Acteur(std::string texturePath);
+		Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position);
 		~Acteur();
-		bool init(float limiteGauche, float limiteDroite, float limiteHaut, float limiteBas);
-		bool IsColliding(FloatRect objet);
-		void Move(const Vector2f direction);
 
 		void Update();
 		void Shoot();
-		const bool GetIsCanShoot();
-
 	protected:
-		bool isCanShoot = true;
 		
-		int tempsEnFrameEntreDeuxTires = 15;
 		int tempsDeRecharge = 0;
 
-		float vitesseMax = 10;
-		float accelerationParSeconde = 5;
 		float autoDeccelerationParSeconde = 1.0;		
-		float limiteDroite;
-		float limiteGauche;
-		float limiteHaut;
-		float limiteBas;
 
+		ActeurType acteurType;
+
+		StateActeur state = stateActeurALife; //Etat actuel de l'ennemi.
+		StateActeur previousState = stateActeurALife; //Etat precedant de l'ennemi.
+
+		Vector2f direction;
 		Vector2f velocity;
+		Vector2f originOffset;
 
 	};
 }

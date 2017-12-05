@@ -2,8 +2,12 @@
 using namespace sideSpaceShooter;
 
 
-Joueur::Joueur():Acteur("Ressources\\Sprites\\joueur.png")
+Joueur::Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position):Acteur(animationActeurSprite, animationActeurExplodingSprite, position)
 {
+	acteurType = acteurTypePlayer;
+	vitesseMax = 6;
+	accelerationParSeconde = 6;
+	tempsEnFrameEntreDeuxTires = 15;
 }
 Joueur::~Joueur()
 {
@@ -26,23 +30,8 @@ const int Joueur::GetNextShotOffset()
 /// <returns></returns>
 float Joueur::GetDeplacement()
 {
-	return positionActuelle.x - positionPrecedente.x;
-}
-/// <summary>
-/// Déplace le joueur dépendamment s'il est entré en collision avec un bloc.
-/// </summary>
-/// <param name="direction">The direction.</param>
-/// <param name="objet">The objet.</param>
-void Joueur::Move(const Vector2f direction, FloatRect objet)
-{
-	positionPrecedente = getPosition();
-	Acteur::Move(direction);
-	Acteur::IsColliding(objet);
-	positionActuelle = getPosition();
 }
 void Joueur::Move(const Vector2f direction)
 {
-	positionPrecedente = getPosition();
 	Acteur::Move(direction);
-	positionActuelle = getPosition();
 }

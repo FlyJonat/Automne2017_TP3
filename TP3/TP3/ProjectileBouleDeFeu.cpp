@@ -1,22 +1,22 @@
-#include "ProjectileLaser.h"
+#include "ProjectileBouleDeFeu.h"
 
 //Laurent- 1562287
 
 using namespace sideSpaceShooter;
 
-ProjectileLaser::ProjectileLaser(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, Vector2f position, Vector2f direction):  Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, position, direction)
+ProjectileBouleDeFeu::ProjectileBouleDeFeu(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, int nbAnimation, Vector2f position, Vector2f direction) : Projectile(animationProjectileSprite, animationProjectileExplodingSprite, nbAnimation, position, direction)
 {
-	vitesseMax = 60;
+	vitesseMax = 5;
 	accelerationParSeconde = 60;
 }
 
 
-ProjectileLaser::~ProjectileLaser()
+ProjectileBouleDeFeu::~ProjectileBouleDeFeu()
 {
 
 }
 
-void ProjectileLaser::Update()
+void ProjectileBouleDeFeu::Update()
 {
 	if (state == stateProjectileMoving)
 	{
@@ -45,36 +45,50 @@ void ProjectileLaser::Update()
 		position.y += velocity.y;
 		rotation = (atan(velocity.y / velocity.x) * (180.0 / M_PI));
 	}
+
 	
+
 	UpdateAnimation();
 }
 
-void ProjectileLaser::UpdateAnimation()
+void ProjectileBouleDeFeu::UpdateAnimation()
 {
 	if (previousState != state)
 	{
 		previousState = state;
 		nbFrameFromBeginAnimation = 0;
 	}
-	++nbFrameFromBeginAnimation;
+	
 
 	if (state == stateProjectileMoving)
 	{
-		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
+		if (revertingAnimation)
+		{
+			--nbFrameFromBeginAnimation;
+		}
+		else
+		{
+			++nbFrameFromBeginAnimation;
+		}
 
 		if (nbFrameFromBeginAnimation >= nbFramePourUnCycle)
 		{
-			nbFrameFromBeginAnimation = 0;
+			revertingAnimation = true;
 		}
+		else if (nbFrameFromBeginAnimation <= 0)
+		{
+			revertingAnimation = false;
+		}
+
+		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
 	}
 	else if (state == stateProjectileExploding)
 	{
 		currentAnimationNumber = floor(nbFrameFromBeginAnimation / 3);
-
+		++nbFrameFromBeginAnimation;
 		if (nbFrameFromBeginAnimation >= 47)
 		{
 			state = stateProjectileDead;
 		}
 	}
 }
-
