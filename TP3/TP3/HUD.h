@@ -11,11 +11,11 @@ namespace sideSpaceShooter
 		HUD();
 		~HUD();
 		void init();
-		void ShowPlayerLife(Joueur joueur);
+		/*static*/ void ShowPlayerLife(Joueur joueur);
 		void Draw();
-		Text GetText();
+		/*static*/ Text GetText();
 	private:
-		string playerLife;
-		Text textPlayerLife;
+		/*static*/ string playerLife;
+		/*static*/ Text textPlayerLife;
 	};
 }

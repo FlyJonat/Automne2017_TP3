@@ -11,10 +11,10 @@ HUD::~HUD()
 void HUD::init()
 {
 	//textPlayerLife.setFont();
-	//textPlayerLife.setFillColor(/*Modele::TEXTE_COULEUR*/);
-	//textPlayerLife.setStyle(/*Modele::TEXTE_STYLE*/);
+	textPlayerLife.setFillColor(/*Modele::TEXTE_COULEUR*/Color::White);
+	textPlayerLife.setStyle(/*Modele::TEXTE_STYLE*/Text::Style::Regular);
 	textPlayerLife.setCharacterSize(16);
-	//player.setString(Modele::GetText(Modele::PointageJeu) + std::to_string(score));
+	//playerLife.setString("");
 }
 void HUD::ShowPlayerLife(Joueur joueur)
 {

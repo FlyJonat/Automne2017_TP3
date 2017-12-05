@@ -189,6 +189,8 @@ bool Game::init()
 	}
 	
 	currentBackground = 0;
+	//HUD::ShowPlayerLife(*joueur);
+	//pointage = HUD::GetText();
 	return true;
 }
 
@@ -438,6 +440,7 @@ void Game::draw()
 	{
 		projectiles[i]->Draw(*mainWin);
 	}
+	//mainWin->draw(pointage);
 	mainWin->display();
 }
 

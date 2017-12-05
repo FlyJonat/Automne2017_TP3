@@ -6,6 +6,7 @@
 #include "ProjectileBouleDeFeu.h"
 #include "ProjectileMissile.h"
 #include "Animation.h"
+#include "HUD.h"
 
 using namespace sf;
 
@@ -106,5 +107,7 @@ namespace sideSpaceShooter
 
 		View view;
 		Event event;
+
+		//Text pointage;
 	};
 }	
