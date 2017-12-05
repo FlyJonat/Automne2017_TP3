@@ -3,7 +3,6 @@
 using namespace sideSpaceShooter;
 using namespace std;
 
-
 //Laurent- 1562287
 
 Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position) : position(position)
@@ -14,6 +13,7 @@ Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExp
 	originOffset = animationsActeurSprites[stateActeurALife]->getOrigin();
 	srand(time(NULL));
 }
+
 Acteur::~Acteur()
 {
 
@@ -27,15 +27,50 @@ void Acteur::Update()
 	}
 	else
 	{
+		readyToAttack = true;
+	}
+	UpdateAnimation();
+}
+
+void Acteur::UpdateAnimation()
+{
+	if (state != stateActeurExploding && state != stateActeurDead)
+	{
+		currentAnimationNumber = 0;
+	}
+	else
+	{
+		currentAnimationNumber = floor(nbFrameFromBeginAnimation / timeInFrameForEachAnimations);
+
+		if (nbFrameFromBeginAnimation >= nbFramePourUnCycle)
+		{
+			state = stateActeurDead;
+		}
+		++nbFrameFromBeginAnimation;
 	}
 }
+
+/// <summary>
+/// Draws the specified fenetre.
+/// </summary>
+/// <param name="fenetre">The fenetre.</param>
+void Acteur::Draw(RenderWindow& fenetre)
 {
+	if (state != stateActeurDead)
 	{
+		animationsActeurSprites[state]->setRotation(rotation);
+		animationsActeurSprites[state]->setPosition(position);
+		animationsActeurSprites[state]->SetProjectileTextureRect(currentAnimationNumber);
+
+		fenetre.draw(*animationsActeurSprites[state]);
 	}
-	{
-	}
-	{
-	}
+
+}
+
+void Acteur::Move(const Vector2f direction)
+{
+	float directionX = direction.x;
+	float directionY = direction.y;
 
 
 	if (directionX != 0)
@@ -73,6 +108,8 @@ void Acteur::Update()
 	{
 		velocity.y = -vitesseMax;
 	}
+	position.x += velocity.x;
+	position.y += velocity.y;
 }
 
 /// <summary>
@@ -84,6 +121,9 @@ void Acteur::Update()
 /// </returns>
 bool Acteur::IsColliding(FloatRect objet)
 {
+	animationsActeurSprites[state]->setPosition(position);
+
+	if (animationsActeurSprites[state]->getGlobalBounds().intersects(objet))
 	{
 		//Colision avec le planché
 		if (((position.y + originOffset.y) - (objet.top)) >= 0 && ((position.y + originOffset.y) - (objet.top) <= 30))
@@ -107,7 +147,6 @@ bool Acteur::IsColliding(FloatRect objet)
 		}
 
 		//Colision avec le coté gauche	
-		
 		else if ((position.x - originOffset.x) - (objet.left + objet.width) <= 0 && (position.x - originOffset.x) - (objet.left - objet.width) >= -30)
 		{
 			velocity.x *= -1;
@@ -119,10 +158,24 @@ bool Acteur::IsColliding(FloatRect objet)
 	return false;
 }
 
+const StateActeur Acteur::GetState()
+{
+	return state;
+}
+
+
 void Acteur::Shoot()
 {
+	readyToAttack = false;
 	tempsDeRecharge = tempsEnFrameEntreDeuxTires;
 }
 
+const bool Acteur::GetReadyToAttack() const
 {
+	return readyToAttack;
+}
+
+const Vector2f Acteur::GetPosition()
+{
+	return position;
 }

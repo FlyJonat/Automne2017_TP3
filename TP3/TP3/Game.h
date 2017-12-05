@@ -1,10 +1,15 @@
 #pragma once
 
 #include "Joueur.h"
+#include "EnnemiDeBase.h"
 #include "ProjectileLaser.h"
+#include "ProjectileBouleDeFeu.h"
+#include "ProjectileMissile.h"
+#include "Animation.h"
 
 using namespace sf;
 
+//Laurent- 1562287
 
 namespace sideSpaceShooter
 {
@@ -35,6 +40,7 @@ namespace sideSpaceShooter
 		static const int LARGEUR_BACKGROUND = 2294;
 		static const int NB_BACKGROUND = 2;
 		static const int NB_ESPACE_BACKGROUND = 5;
+		static const int NB_SPRITE_SHEET_ANIMATION = 13;
 
 		const std::string textureBlocPath = "Ressources\\Sprites\\bloc";
 
@@ -69,6 +75,7 @@ namespace sideSpaceShooter
 		const std::string textureExplosionProjectilePath = "Ressources\\Sprites\\explosion_Projectile.png";
 
 		float deplacementBackgroundX;
+		float deplacementBackgroundTotal = 0;
 		int currentBackground;
 		Texture backgroundsT[NB_BACKGROUND];
 		Sprite* backgrounds[NB_BACKGROUND];
@@ -92,6 +99,7 @@ namespace sideSpaceShooter
 		Ennemi*  ennemi;
 		vector<Ennemi*> ennemis;
 		vector<Projectile*> projectiles;
+		Animation * animations[NB_SPRITE_SHEET_ANIMATION];
 
 		//touches
 		std::map<Keyboard::Key, bool> inputs;

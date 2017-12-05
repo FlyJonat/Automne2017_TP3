@@ -51,7 +51,7 @@ bool Animation::init(const String texturePath)
 
 	//Le rectangle d'animation initial
 	setTextureRect(intRectsAnimation[0]);
-	setOrigin(intRectsAnimation[0].height / 2, intRectsAnimation[0].width / 2);
+	setOrigin(intRectsAnimation[0].width / 2, intRectsAnimation[0].height / 2);
 	return true;
 }
 

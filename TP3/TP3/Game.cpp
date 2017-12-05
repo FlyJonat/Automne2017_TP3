@@ -5,6 +5,8 @@
 using namespace sideSpaceShooter;
 using namespace std;
 
+//Laurent- 1562287
+
 Game::Game()
 {
 	//On place dans le contructeur ce qui permet à la game elle-même de fonctionner
@@ -21,6 +23,10 @@ Game::Game()
 Game::~Game()
 {
 	delete joueur;
+	
+	for (size_t i = 0; i < NB_SPRITE_SHEET_ANIMATION; ++i)
+	{
+		delete animations[i];
 	}
 	for (size_t i = 0; i < NB_BACKGROUND; ++i)
 	{
@@ -64,6 +70,13 @@ bool Game::init()
 {
 	deplacementBackgroundTotal = 0;
 
+	for (size_t i = 0; i < NB_SPRITE_SHEET_ANIMATION; ++i)
+	{
+		animations[i] = nullptr;
+	}
+
+	animations[animationJoueur] = new Animation(NB_COLONES_JOUEUR_ANIMATION, NB_LIGNES_JOUEUR_ANIMATION, NB_ANIMES_JOUEUR_ANIMATION);
+	if (!animations[animationJoueur]->init(textureJoueurPath))
 	{
 		return false;
 	}
@@ -113,6 +126,9 @@ bool Game::init()
 	}
 	srand(time(NULL));
 
+	Vector2f position;
+	position.x = 0;
+	position.y = 0;
 	// On charge un niveau à partir d'un fichier .txt
 	ifstream readLevel("Ressources\\Level\\level1.txt"); // Lecture d'un niveau par fichier texte
 	string currentLine; // Ligne courante
@@ -222,6 +238,7 @@ void Game::update()
 	{
 		if (grilleDeTuiles[i] != nullptr)
 		{
+			joueur->IsColliding(grilleDeTuiles[i]->getGlobalBounds());
 		}
 		else
 		{
@@ -250,14 +267,19 @@ void Game::update()
 		direction.y = 1;
 	}
 
+	joueur->Move(direction);
+
 	deplacementBackgroundX = -0.1*joueur->GetDeplacement();
 
+	if (inputs[Keyboard::Space] && joueur->GetReadyToAttack())
 	{
 		joueur->Shoot();
 		Vector2f directionProjectile;
 		directionProjectile.x = 1;
 		directionProjectile.y = 0;
 		Vector2f positionProjectile;
+		positionProjectile.x = joueur->GetPosition().x;
+		positionProjectile.y = joueur->GetPosition().y;
 		//Création du projectile
 		Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11,  positionProjectile, directionProjectile);
 		projectiles.push_back(p);
@@ -311,6 +333,23 @@ void Game::update()
 	//Vérifie la collision entre un projectile et une tuile.
 	for (size_t i = 0; i < projectiles.size(); ++i)
 	{
+		
+		if (projectiles[i]->GetState() == stateProjectileMoving)
+		{
+			for (size_t j = 0; j < MAX_TUILES; ++j)
+			{
+				if (grilleDeTuiles[j] != nullptr)
+				{
+					//Détruit le projectile en cas de collision.
+					if (projectiles[i]->IsColliding(grilleDeTuiles[j]->getGlobalBounds()))
+					{
+						projectiles[i]->Exploding();
+						break;
+					}
+				}
+			}
+		}
+		
 		projectiles[i]->Update();
 		//Vérifie la collision entre le joueur et un projectile. Le joueur meurt en cas de collision.
 		/*if (projectiles[i]->IsColliding(joueur->getPosition(), TAILLE_TUILES_X, TAILLE_TUILES_Y))
@@ -321,7 +360,9 @@ void Game::update()
 
 	//mouvement background
 	deplacementBackgroundTotal += deplacementBackgroundX;
+	currentBackground = (int)joueur->GetPosition().x/ LARGEUR_BACKGROUND;
 	float positionJoueurCalculBackground;
+	positionJoueurCalculBackground = joueur->GetPosition().x;
 	
 	//Réapparition Background
 	if(positionJoueurCalculBackground>=(LARGEUR_BACKGROUND*currentBackground)+(1000+deplacementBackgroundTotal)  && currentBackground>=0 && currentBackground<=NB_ESPACE_BACKGROUND)
@@ -352,13 +393,18 @@ void Game::update()
 		backgrounds[i]->move(deplacementBackgroundX, 0);
 	}
 	//Vue
+	if (joueur->GetPosition().x - view.getSize().x / 2 > limiteGauche && joueur->GetPosition().x + view.getSize().x / 2 < limiteDroite)
 	{
+		view.setCenter(joueur->GetPosition().x, view.getCenter().y);
 	}
+	if(joueur->GetPosition().y - view.getSize().y / 2 > limiteHaut && joueur->GetPosition().y + view.getSize().y / 2 < limiteBas)
 	{
+		view.setCenter(view.getCenter().x, joueur->GetPosition().y);
 	}
 	
 	mainWin->setView(view);
 
+	checkIfIsDead();
 	++timer;
 }
 
@@ -383,6 +429,7 @@ void Game::draw()
 		}
 	}
 
+	joueur->Draw(*mainWin);
 	for (size_t i = 0; i < ennemis.size(); i++)
 	{
 		ennemis[i]->Draw(*mainWin);
@@ -402,6 +449,7 @@ void Game::checkIfIsDead()
 	//Vérifie les projectiles morts
 	for (size_t i = 0; i < projectiles.size(); i++)
 	{
+		if (projectiles[i]->GetState() == stateProjectileDead)
 		{
 			delete projectiles[i];
 			projectiles.erase(projectiles.begin() + i);

@@ -4,7 +4,7 @@
 
 using namespace sideSpaceShooter;
 
-Ennemi::Ennemi(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, const int SCORE_VALUE, ActeurType ACTEUR_TYPE, Vector2f position) : Acteur(animationActeurSprite, animationActeurExplodingSprite, ACTEUR_TYPE, position), SCORE_VALUE(SCORE_VALUE)
+Ennemi::Ennemi(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position) : Acteur(animationActeurSprite, animationActeurExplodingSprite, position)
 {
 
 }
@@ -23,7 +23,7 @@ void Ennemi::Move(const int directionX, const int directionY)
 }
 
 
-void Ennemi::Update()
+void Ennemi::Update(Vector2f playerPosition)
 {
 	
 	UpdateAnimation();
@@ -37,6 +37,20 @@ void Ennemi::UpdateAnimation()
 
 const int Ennemi::GetScoreValue()
 {
-	return SCORE_VALUE;
+	return scoreValue;
 }
 
+bool Ennemi::LookForPlayer(Vector2f playerPosition)
+{
+	
+	if (position.x - SIGHT_RANGE <= playerPosition.x && position.x + SIGHT_RANGE >= playerPosition.x)
+	{
+		return true;
+	}
+	return false;
+}
+
+const bool Ennemi::GetWantToAttack()
+{
+	return wantToAttack;
+}

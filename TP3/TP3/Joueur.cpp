@@ -12,6 +12,11 @@ Joueur::Joueur(Animation * animationActeurSprite, Animation * animationActeurExp
 Joueur::~Joueur()
 {
 }
+
+void Joueur::Update()
+{
+	Acteur::Update();
+}
 const int Joueur::GetNextShotOffset()
 {
 	if (nextShotOffset == 1)
@@ -30,8 +35,11 @@ const int Joueur::GetNextShotOffset()
 /// <returns></returns>
 float Joueur::GetDeplacement()
 {
+	return position.x - positionPrecedente.x;
 }
+
 void Joueur::Move(const Vector2f direction)
 {
+	positionPrecedente = position;
 	Acteur::Move(direction);
 }

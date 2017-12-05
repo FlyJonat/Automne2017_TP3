@@ -11,6 +11,7 @@ namespace sideSpaceShooter
 		~Joueur();
 		const int GetNextShotOffset();
 		float GetDeplacement();
+		void Update();
 		void Move(const Vector2f direction);
 	private :
 		float nextShotOffset = 1;
