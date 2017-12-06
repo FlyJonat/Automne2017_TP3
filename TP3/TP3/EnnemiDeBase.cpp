@@ -4,7 +4,7 @@
 
 using namespace sideSpaceShooter;
 
-EnnemiDeBase::EnnemiDeBase(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, Vector2f position) : Ennemi(animationProjectileSprite, animationProjectileExplodingSprite, position)
+EnnemiDeBase::EnnemiDeBase(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, Vector2f position, ProjectileManager * projectileManager) : Ennemi(animationProjectileSprite, animationProjectileExplodingSprite, position, projectileManager)
 {
 	scoreValue = 10;
 	acteurType = acteurTypeEnnemiDeBase;
@@ -23,11 +23,19 @@ void EnnemiDeBase::Update(Vector2f playerPosition)
 	Acteur::Update();
 	if (Ennemi::LookForPlayer(playerPosition))
 	{
-		wantToAttack = true;
+		Acteur::Move(-CalculateDirectionToPlayer(playerPosition));
+		if (readyToAttack)
+		{
+			Shoot();
+			projectileManager->GenerateProjectile(laser, position, direction);
+		}
+		
 	}
 	else
 	{
-		wantToAttack = false;
+		direction.x = 0;
+		direction.y = 0;
+		Acteur::Move(direction);
 	}
 }
 

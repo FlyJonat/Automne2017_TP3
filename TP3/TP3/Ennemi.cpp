@@ -4,7 +4,7 @@
 
 using namespace sideSpaceShooter;
 
-Ennemi::Ennemi(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position) : Acteur(animationActeurSprite, animationActeurExplodingSprite, position)
+Ennemi::Ennemi(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position, ProjectileManager * projectileManager) : Acteur(animationActeurSprite, animationActeurExplodingSprite, position, projectileManager)
 {
 
 }
@@ -42,15 +42,30 @@ const int Ennemi::GetScoreValue()
 
 bool Ennemi::LookForPlayer(Vector2f playerPosition)
 {
-	
-	if (position.x - SIGHT_RANGE <= playerPosition.x && position.x + SIGHT_RANGE >= playerPosition.x)
+	if (position.y - SIGHT_RANGE <= playerPosition.y && position.y + SIGHT_RANGE >= playerPosition.y)
 	{
-		return true;
+		if (position.x - SIGHT_RANGE <= playerPosition.x && position.x + SIGHT_RANGE >= playerPosition.x)
+		{
+			return true;
+		}
 	}
+	
 	return false;
 }
 
-const bool Ennemi::GetWantToAttack()
+
+Vector2f Ennemi::CalculateDirectionToPlayer(Vector2f playerPosition)
 {
-	return wantToAttack;
+	Vector2f distanceAParcourir;
+	distanceAParcourir = playerPosition - position;
+
+	direction.x = (distanceAParcourir.x / fabs(distanceAParcourir.x + distanceAParcourir.y));
+	direction.y = (distanceAParcourir.y / fabs(distanceAParcourir.x + distanceAParcourir.y));
+
+	rotation = (atan (direction.y / direction.x) * (180.0 / M_PI));
+	if (direction.x > 0)
+	{
+		rotation += 180;
+	}
+	return direction;
 }

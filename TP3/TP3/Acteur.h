@@ -3,6 +3,10 @@
 #include <string>
 #include <math.h>
 #include "Animation.h"
+#include "ProjectileManager.h"
+#ifndef M_PI
+	#define M_PI 3.14159265358979323846
+#endif
 
 enum StateActeur{ stateActeurALife, stateActeurExploding, stateActeurDead };
 enum ActeurType { acteurTypeOther, acteurTypeRandom, acteurTypePlayer, acteurTypeEnnemiDeBase, acteurTypeKamikaze, acteurTypeTurret, acteurTypeLanceurMissile, acteurTypeCarrier, acteurTypeBoss };
@@ -17,7 +21,7 @@ namespace sideSpaceShooter
 	{
 
 	public:
-		Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position);
+		Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position, ProjectileManager * projectileManager);
 		~Acteur();
 
 		void Update();
@@ -27,7 +31,6 @@ namespace sideSpaceShooter
 		bool IsColliding(FloatRect objet);
 		const StateActeur GetState();
 		void Shoot();
-		const bool GetReadyToAttack() const;
 		const Vector2f GetPosition();
 	protected:
 		bool readyToAttack = true;
@@ -57,6 +60,6 @@ namespace sideSpaceShooter
 		Vector2f originOffset;
 
 		Animation * animationsActeurSprites[2];
-
+		ProjectileManager * projectileManager;
 	};
 }

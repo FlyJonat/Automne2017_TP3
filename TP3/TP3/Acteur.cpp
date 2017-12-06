@@ -5,7 +5,7 @@ using namespace std;
 
 //Laurent- 1562287
 
-Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position) : position(position)
+Acteur::Acteur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position, ProjectileManager * projectileManager) : position(position), projectileManager(projectileManager)
 {
 	this->animationsActeurSprites[stateActeurALife] = animationActeurSprite;
 	this->animationsActeurSprites[stateActeurExploding] = animationActeurExplodingSprite;
@@ -168,11 +168,6 @@ void Acteur::Shoot()
 {
 	readyToAttack = false;
 	tempsDeRecharge = tempsEnFrameEntreDeuxTires;
-}
-
-const bool Acteur::GetReadyToAttack() const
-{
-	return readyToAttack;
 }
 
 const Vector2f Acteur::GetPosition()

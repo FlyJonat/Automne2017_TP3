@@ -44,6 +44,10 @@ void ProjectileBouleDeFeu::Update()
 		position.x += velocity.x;
 		position.y += velocity.y;
 		rotation = (atan(velocity.y / velocity.x) * (180.0 / M_PI));
+		if (direction.x < 0)
+		{
+			rotation += 180;
+		}
 	}
 
 	

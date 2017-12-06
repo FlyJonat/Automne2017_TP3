@@ -2,7 +2,7 @@
 using namespace sideSpaceShooter;
 
 
-Joueur::Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position):Acteur(animationActeurSprite, animationActeurExplodingSprite, position)
+Joueur::Joueur(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position, ProjectileManager * projectileManager):Acteur(animationActeurSprite, animationActeurExplodingSprite, position, projectileManager)
 {
 	acteurType = acteurTypePlayer;
 	vitesseMax = 6;
@@ -42,4 +42,9 @@ void Joueur::Move(const Vector2f direction)
 {
 	positionPrecedente = position;
 	Acteur::Move(direction);
+}
+
+const bool Joueur::GetReadyToAttack()
+{
+	return readyToAttack;
 }

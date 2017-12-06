@@ -9,7 +9,7 @@ namespace sideSpaceShooter
 	class EnnemiDeBase : public Ennemi
 	{
 	public:
-		EnnemiDeBase(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position);
+		EnnemiDeBase(Animation * animationActeurSprite, Animation * animationActeurExplodingSprite, Vector2f position, ProjectileManager * projectileManager);
 		~EnnemiDeBase();
 
 		

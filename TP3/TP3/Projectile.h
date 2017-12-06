@@ -10,7 +10,7 @@ using namespace sf;
 using namespace std;
 
 enum StateProjectile { stateProjectileMoving, stateProjectileExploding, stateProjectileDead };
-
+enum ProjectileType{laser, bouleDeFeu, missile, missileTeteChercheuse};
 //Laurent- 1562287
 
 namespace sideSpaceShooter

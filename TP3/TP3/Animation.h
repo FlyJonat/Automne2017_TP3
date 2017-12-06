@@ -5,7 +5,7 @@ using namespace sf;
 
 //Laurent- 1562287
 
-enum animationType { animationJoueur, animationEnnemiDeBase, animationKamikaze, animationTurret, animationLanceurMissile, animationCarrier, animationBoss, animationLaser, animationMissile, animationBouleDeFeu, animationProjectileExplosion, animationActeurExplosion, animationBosseExplosion};
+enum animationType { animationJoueur, animationEnnemiDeBase, animationKamikaze, animationLanceurMissile, animationTurret, animationCarrier, animationBoss, animationLaser, animationMissile, animationBouleDeFeu, animationProjectileExplosion, animationActeurExplosion, animationBosseExplosion};
 
 namespace sideSpaceShooter
 {

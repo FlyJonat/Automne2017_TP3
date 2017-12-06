@@ -2,10 +2,9 @@
 
 #include "Joueur.h"
 #include "EnnemiDeBase.h"
-#include "ProjectileLaser.h"
-#include "ProjectileBouleDeFeu.h"
-#include "ProjectileMissile.h"
-#include "Animation.h"
+#include "EnnemiKamikaze.h"
+#include "EnnemiLanceurMissile.h"
+#include "ProjectileManager.h"
 
 using namespace sf;
 
@@ -53,6 +52,16 @@ namespace sideSpaceShooter
 		static const int NB_LIGNES_ENNEMI_DE_BASE_ANIMATION = 1;
 		static const int NB_ANIMES_ENNEMI_DE_BASE_ANIMATION = 1;
 		const std::string textureEnnemiDeBasePath = "Ressources\\Sprites\\ennemi_de_base.png";
+
+		static const int NB_COLONES_ENNEMI_KAMIKAZE_ANIMATION = 1;
+		static const int NB_LIGNES_ENNEMI_KAMIKAZE_ANIMATION = 1;
+		static const int NB_ANIMES_ENNEMI_KAMIKAZE_ANIMATION = 1;
+		const std::string textureEnnemiKamikazePath = "Ressources\\Sprites\\ennemi_kamikaze.png";
+
+		static const int NB_COLONES_ENNEMI_LANCEUR_MISSILE_ANIMATION = 1;
+		static const int NB_LIGNES_ENNEMI_LANCEUR_MISSILE_ANIMATION = 1;
+		static const int NB_ANIMES_ENNEMI_LANCEUR_MISSILE_ANIMATION = 1;
+		const std::string textureEnnemiLanceurMissilePath = "Ressources\\Sprites\\ennemi_lanceur_missiles.png";
 		
 		static const int NB_COLONES_LASER_ANIMATION = 1;
 		static const int NB_LIGNES_LASER_ANIMATION = 11;
@@ -98,8 +107,9 @@ namespace sideSpaceShooter
 
 		Ennemi*  ennemi;
 		vector<Ennemi*> ennemis;
-		vector<Projectile*> projectiles;
+
 		Animation * animations[NB_SPRITE_SHEET_ANIMATION];
+		ProjectileManager * projectileManager;
 
 		//touches
 		std::map<Keyboard::Key, bool> inputs;
