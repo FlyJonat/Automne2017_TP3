@@ -32,9 +32,12 @@ namespace sideSpaceShooter
 		const StateActeur GetState();
 		void Shoot();
 		const Vector2f GetPosition();
+		int GetLifeInfo();
 	protected:
 		bool readyToAttack = true;
 		
+		int life = 1;
+
 		int tempsEnFrameEntreDeuxTires = 0;
 		int tempsDeRecharge = 0;
 
@@ -61,5 +64,6 @@ namespace sideSpaceShooter
 
 		Animation * animationsActeurSprites[2];
 		ProjectileManager * projectileManager;
+		
 	};
 }

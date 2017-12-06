@@ -5,6 +5,7 @@
 #include "EnnemiKamikaze.h"
 #include "EnnemiLanceurMissile.h"
 #include "ProjectileManager.h"
+#include "HUD.h"
 
 using namespace sf;
 
@@ -28,7 +29,6 @@ namespace sideSpaceShooter
 		void getInput();
 		void update();
 		void draw();
-		void checkIfIsDead();
 
 		static const int LARGEUR = 1280;
 		static const int HAUTEUR = 720;
@@ -116,5 +116,7 @@ namespace sideSpaceShooter
 
 		View view;
 		Event event;
+
+		//Text pointage;
 	};
 }	

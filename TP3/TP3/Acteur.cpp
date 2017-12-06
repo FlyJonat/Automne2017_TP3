@@ -174,3 +174,7 @@ const Vector2f Acteur::GetPosition()
 {
 	return position;
 }
+int Acteur::GetLifeInfo()
+{
+	return life;
+}
