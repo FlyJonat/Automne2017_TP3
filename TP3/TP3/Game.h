@@ -4,6 +4,7 @@
 #include "EnnemiDeBase.h"
 #include "EnnemiKamikaze.h"
 #include "EnnemiLanceurMissile.h"
+#include "EnnemiTurret.h"
 #include "ProjectileManager.h"
 #include "HUD.h"
 
@@ -62,6 +63,11 @@ namespace sideSpaceShooter
 		static const int NB_LIGNES_ENNEMI_LANCEUR_MISSILE_ANIMATION = 1;
 		static const int NB_ANIMES_ENNEMI_LANCEUR_MISSILE_ANIMATION = 1;
 		const std::string textureEnnemiLanceurMissilePath = "Ressources\\Sprites\\ennemi_lanceur_missiles.png";
+
+		static const int NB_COLONES_ENNEMI_TURRET_ANIMATION = 1;
+		static const int NB_LIGNES_ENNEMI_TURRET_ANIMATION = 1;
+		static const int NB_ANIMES_ENNEMI_TURRET_ANIMATION = 1;
+		const std::string textureEnnemiTurretPath = "Ressources\\Sprites\\ennemi_turret.png";
 		
 		static const int NB_COLONES_LASER_ANIMATION = 1;
 		static const int NB_LIGNES_LASER_ANIMATION = 11;

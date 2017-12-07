@@ -10,7 +10,7 @@ using namespace sf;
 using namespace std;
 
 enum StateProjectile { stateProjectileMoving, stateProjectileExploding, stateProjectileDead };
-enum ProjectileType{laser, bouleDeFeu, missile, missileTeteChercheuse};
+enum ProjectileType{laser, bouleDeFeu, missile};
 //Laurent- 1562287
 
 namespace sideSpaceShooter
@@ -24,6 +24,7 @@ namespace sideSpaceShooter
 		void Draw(RenderWindow& fenetre);
 		const bool IsColliding(FloatRect objet);
 		void Exploding();
+		const FloatRect GetGlobalBounds();
 		const StateProjectile GetState();
 
 	protected:

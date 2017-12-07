@@ -7,7 +7,7 @@ using namespace sideSpaceShooter;
 EnnemiLanceurMissile::EnnemiLanceurMissile(Animation * animationProjectileSprite, Animation * animationProjectileExplodingSprite, Vector2f position, ProjectileManager * projectileManager) : Ennemi(animationProjectileSprite, animationProjectileExplodingSprite, position, projectileManager)
 {
 	scoreValue = 10;
-	acteurType = acteurTypeEnnemiDeBase;
+	acteurType = acteurTypeLanceurMissile;
 	vitesseMax = 6;
 	accelerationParSeconde = 6;
 	tempsEnFrameEntreDeuxTires = 60;
@@ -27,7 +27,7 @@ void EnnemiLanceurMissile::Update(Vector2f playerPosition)
 		if (readyToAttack)
 		{
 			Shoot();
-			projectileManager->GenerateProjectile(missile, position, direction);
+			projectileManager->GenerateProjectile(missile, position, direction, alien);
 		}
 
 	}

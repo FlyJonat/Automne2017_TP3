@@ -11,37 +11,41 @@ ProjectileManager::ProjectileManager(Sprite * grilleDeTuiles[], const int MAX_TU
 
 ProjectileManager::~ProjectileManager()
 {
-	for (size_t i = 0; i < projectiles.size(); ++i)
+	for (size_t i = 0; i < 2; ++i)
 	{
-		delete projectiles[i];
+		for (size_t j = 0; j < projectiles[i].size(); ++j)
+		{
+			delete projectiles[i][j];
+		}
 	}
 }
 
 
-void ProjectileManager::GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction)
+void ProjectileManager::GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction, Aliance aliance)
 {
+	
 	if (projectileType == laser)
 	{
 		Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11, position, direction);
-		projectiles.push_back(p);
+		projectiles[aliance].push_back(p);
 	}
 	
 	else if (projectileType == bouleDeFeu)
 	{
 		Projectile* a = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, position, direction);
-		projectiles.push_back(a);
+		projectiles[aliance].push_back(a);
 		direction.y = 1;
 		Projectile* b = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, position, direction);
-		projectiles.push_back(b);
+		projectiles[aliance].push_back(b);
 		direction.y = -1;
 		Projectile* c = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, position, direction);
-		projectiles.push_back(c);
+		projectiles[aliance].push_back(c);
 	}
 	
 	else if (projectileType == missile)
 	{
 		Projectile* d = new ProjectileMissile(animations[animationMissile], animations[animationProjectileExplosion], 8, position, direction);
-		projectiles.push_back(d);
+		projectiles[aliance].push_back(d);
 	}
 
 	
@@ -49,42 +53,68 @@ void ProjectileManager::GenerateProjectile(ProjectileType projectileType, Vector
 void ProjectileManager::Update()
 {
 	//Vérifie les projectiles morts
-	for (size_t i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < 2; i++)
 	{
-		if (projectiles[i]->GetState() == stateProjectileDead)
+		for (size_t j = 0; j < projectiles[i].size(); j++)
 		{
-			delete projectiles[i];
-			projectiles.erase(projectiles.begin() + i);
+			if (projectiles[i][j]->GetState() == stateProjectileDead)
+			{
+				delete projectiles[i][j];
+				projectiles[i].erase(projectiles[i].begin() + j);
+			}
 		}
 	}
 
-	//Vérifie la collision entre un projectile et une tuile.
-	for (size_t i = 0; i < projectiles.size(); ++i)
+	for (size_t i = 0; i < projectiles[terran].size(); ++i)
 	{
-
-		if (projectiles[i]->GetState() == stateProjectileMoving)
+		if (projectiles[terran][i]->GetState() == stateProjectileMoving)
 		{
-			for (size_t j = 0; j < MAX_TUILES; ++j)
+			for (size_t j = 0; j < projectiles[alien].size(); j++)
 			{
-				if (grilleDeTuiles[j] != nullptr)
+				//Détruit le projectile en cas de collision.
+				if (projectiles[alien][j]->GetState() == stateProjectileMoving && projectiles[terran][i]->IsColliding(projectiles[alien][j]->GetGlobalBounds()))
 				{
-					//Détruit le projectile en cas de collision.
-					if (projectiles[i]->IsColliding(grilleDeTuiles[j]->getGlobalBounds()))
-					{
-						projectiles[i]->Exploding();
-						break;
-					}
+					projectiles[terran][i]->Exploding();
+					projectiles[alien][j]->Exploding();
+					break;
 				}
 			}
 		}
-
-		projectiles[i]->Update();
 	}
+	for (size_t i = 0; i < 2; i++)
+	{
+		//Vérifie la collision entre un projectile et une tuile.
+		for (size_t j = 0; j < projectiles[i].size(); ++j)
+		{
+
+			if (projectiles[i][j]->GetState() == stateProjectileMoving)
+			{
+				for (size_t k = 0; k < MAX_TUILES; ++k)
+				{
+					if (grilleDeTuiles[k] != nullptr)
+					{
+						//Détruit le projectile en cas de collision.
+						if (projectiles[i][j]->IsColliding(grilleDeTuiles[k]->getGlobalBounds()))
+						{
+							projectiles[i][j]->Exploding();
+							break;
+						}
+					}
+				}
+			}
+
+			projectiles[i][j]->Update();
+		}
+	}
+	
 }
 void ProjectileManager::Drawn(RenderWindow& fenetre)
 {
-	for (size_t i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < 2; ++i)
 	{
-		projectiles[i]->Draw(fenetre);
+		for (size_t j = 0; j < projectiles[i].size(); ++j)
+		{
+			projectiles[i][j]->Draw(fenetre);
+		}
 	}
 }

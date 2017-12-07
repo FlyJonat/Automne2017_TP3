@@ -27,7 +27,7 @@ void EnnemiDeBase::Update(Vector2f playerPosition)
 		if (readyToAttack)
 		{
 			Shoot();
-			projectileManager->GenerateProjectile(laser, position, direction);
+			projectileManager->GenerateProjectile(laser, position, direction, alien);
 		}
 		
 	}

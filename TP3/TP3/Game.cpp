@@ -96,6 +96,12 @@ bool Game::init()
 		return false;
 	}
 
+	animations[animationTurret] = new Animation(NB_COLONES_ENNEMI_TURRET_ANIMATION, NB_LIGNES_ENNEMI_TURRET_ANIMATION, NB_ANIMES_ENNEMI_TURRET_ANIMATION);
+	if (!animations[animationTurret]->init(textureEnnemiTurretPath))
+	{
+		return false;
+	}
+
 	animations[animationLaser] = new Animation(NB_COLONES_LASER_ANIMATION, NB_LIGNES_LASER_ANIMATION, NB_ANIMES_LASER_ANIMATION);
 	if (!animations[animationLaser]->init(textureLaserPath))
 	{
@@ -195,6 +201,15 @@ bool Game::init()
 					position.y = (levelLine * TAILLE_TUILES_Y);
 
 					ennemi = new EnnemiLanceurMissile(animations[animationLanceurMissile], animations[animationProjectileExplosion], position, projectileManager);
+					ennemis.push_back(ennemi);
+
+					break;
+
+				case 100: // Ennemi lanceur de missile
+					position.x = (i * TAILLE_TUILES_X);
+					position.y = (levelLine * TAILLE_TUILES_Y);
+
+					ennemi = new EnnemiTurret(animations[animationTurret], animations[animationProjectileExplosion], position, projectileManager);
 					ennemis.push_back(ennemi);
 
 					break;
@@ -310,7 +325,7 @@ void Game::update()
 		direction.x = 1;
 		direction.y = 0;
 		joueur->Shoot();
-		projectileManager->GenerateProjectile(laser, joueur->GetPosition(), direction);
+		projectileManager->GenerateProjectile(laser, joueur->GetPosition(), direction, terran);
 	}
 
 	
@@ -322,11 +337,13 @@ void Game::update()
 			{
 				if (grilleDeTuiles[j] != nullptr)
 				{
-					
-					if (ennemis[i]->IsColliding(grilleDeTuiles[j]->getGlobalBounds()))
+					if (ennemis[i]->GetType() != acteurTypeTurret)
 					{
-						break;
-					}
+						if (ennemis[i]->IsColliding(grilleDeTuiles[j]->getGlobalBounds()))
+						{
+							break;
+						}
+					}			
 				}
 			}
 			ennemis[i]->Update(joueur->GetPosition());

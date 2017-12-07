@@ -85,3 +85,9 @@ int Projectile::GetRandomNum(int max)
 	int numRandom = 0;
 	return numRandom = rand() % max;
 }
+
+const FloatRect Projectile::GetGlobalBounds()
+{
+	animationsProjectilesSprites[state]->setPosition(position);
+	return animationsProjectilesSprites[state]->getGlobalBounds();
+}

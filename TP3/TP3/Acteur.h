@@ -30,6 +30,7 @@ namespace sideSpaceShooter
 		void Move(const Vector2f direction);
 		bool IsColliding(FloatRect objet);
 		const StateActeur GetState();
+		const ActeurType GetType();
 		void Shoot();
 		const Vector2f GetPosition();
 		int GetLifeInfo();

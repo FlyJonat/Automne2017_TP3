@@ -163,6 +163,11 @@ const StateActeur Acteur::GetState()
 	return state;
 }
 
+const ActeurType Acteur::GetType()
+{
+	return acteurType;
+}
+
 
 void Acteur::Shoot()
 {

@@ -5,6 +5,8 @@
 #include "ProjectileBouleDeFeu.h"
 #include "ProjectileMissile.h"
 
+enum Aliance { terran, alien };
+
 namespace sideSpaceShooter
 {
 	class ProjectileManager
@@ -12,15 +14,16 @@ namespace sideSpaceShooter
 	public:
 		ProjectileManager(Sprite* grilleDeTuiles[], const int MAX_TUILES, Animation * animations[], const int NB_SPRITE_SHEET_ANIMATION);
 		~ProjectileManager();
-		void GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction);
+		void GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction, Aliance aliance);
 		void Update();
 		void Drawn(RenderWindow& fenetre);
 
-	private :
+	private:
 		const int MAX_TUILES;
 		const int NB_SPRITE_SHEET_ANIMATION;
 		Sprite** grilleDeTuiles;
 		Animation ** animations;
-		vector<Projectile*> projectiles;
+		vector<Projectile*> projectiles[2];
+
 	};
 }

@@ -16,7 +16,6 @@ namespace sideSpaceShooter
 		~Animation();
 		bool init(const String texturePath);
 		void SetProjectileTextureRect(int textureRectNum);
-		
 
 	private :
 		int nbColones = 0;  //Total de colones dans la spriteSheet
