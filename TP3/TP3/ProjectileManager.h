@@ -17,7 +17,7 @@ namespace sideSpaceShooter
 		void GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction, Alliance Alliance);
 		void Update();
 		void Drawn(RenderWindow& fenetre);
-		int TestCollision(FloatRect objet, Alliance alliance);
+		int TestCollision(const Animation *objet, Alliance alliance);
 
 	private:
 		const int MAX_TUILES;

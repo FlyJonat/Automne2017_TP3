@@ -46,15 +46,7 @@ void Projectile::Draw(RenderWindow& fenetre)
 	}
 }
 
-/// <summary>
-/// Determines whether the specified position objet is colliding.
-/// </summary>
-/// <param name="positionObjet">The position objet.</param>
-/// <param name="largeurObjet">The largeur objet.</param>
-/// <param name="hauteurObjet">The hauteur objet.</param>
-/// <returns>
-///   <c>true</c> if the specified position objet is colliding; otherwise, <c>false</c>.
-/// </returns>
+
 const bool Projectile::IsColliding(FloatRect objet)
 {
 
@@ -62,6 +54,43 @@ const bool Projectile::IsColliding(FloatRect objet)
 	if (animationsProjectilesSprites[state]->getGlobalBounds().intersects(objet))
 	{
 		return true;
+	}
+	return false;
+}
+
+const bool Projectile::IsCollidingPixelPerfect(const Animation *objet)
+{
+	FloatRect Intersection;
+
+	if (animationsProjectilesSprites[state]->getGlobalBounds().intersects(objet->getGlobalBounds(), Intersection))
+	{
+		IntRect thisSubRect = animationsProjectilesSprites[state]->getTextureRect();
+		IntRect autreSubRect = objet->getTextureRect();
+
+		unsigned char* mask1 = bitmasks.getMask(animationsProjectilesSprites[state]->getTexture());
+		unsigned char* mask2 = bitmasks.getMask(objet->getTexture());
+
+		// Loop through our pixels
+		for (int i = Intersection.left; i < Intersection.left + Intersection.width; i++)
+		{
+			for (int j = Intersection.top; j < Intersection.top + Intersection.height; j++)
+			{
+
+				Vector2f thisVector = animationsProjectilesSprites[state]->getInverseTransform().transformPoint(i, j);
+				Vector2f autreVector = objet->getInverseTransform().transformPoint(i, j);
+
+				// Make sure pixels fall within the sprite's subrect
+				if (thisVector.x > 0 && thisVector.y > 0 && autreVector.x > 0 && autreVector.y > 0 &&
+					thisVector.x < thisSubRect.width && thisVector.y < thisSubRect.height &&
+					autreVector.x < autreSubRect.width && autreVector.y < autreSubRect.height)
+				{
+					if (bitmasks.getPixel(mask1, animationsProjectilesSprites[state]->getTexture(), (int)(thisVector.x) + thisSubRect.left, (int)(thisVector.y) + thisSubRect.top) > 0 &&
+						bitmasks.getPixel(mask2, objet->getTexture(), (int)(autreVector.x) + autreSubRect.left, (int)(autreVector.y) + autreSubRect.top) > 0)
+						return true;
+
+				}
+			}
+		}
 	}
 	return false;
 }

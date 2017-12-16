@@ -185,9 +185,9 @@ const int Acteur::GetLifeInfo() const
 	return life;
 }
 
-const FloatRect Acteur::GetGlobalBounds() const
+const Animation* Acteur::GetAnimation() const
 {
 	animationsActeurSprites[state]->setPosition(position);
 
-	return animationsActeurSprites[state]->getGlobalBounds();
+	return animationsActeurSprites[state];
 }

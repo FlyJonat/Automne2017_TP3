@@ -3,8 +3,8 @@
 	#define M_PI 3.14159265358979323846
 #endif
 #include <math.h>
-#include <SFML/Graphics.hpp>
 #include "Animation.h"
+#include "BitmaskManager.h"
 
 using namespace sf;
 using namespace std;
@@ -23,6 +23,7 @@ namespace sideSpaceShooter
 		virtual void Update();
 		void Draw(RenderWindow& fenetre);
 		const bool IsColliding(FloatRect objet);
+		const bool IsCollidingPixelPerfect(const Animation *objet);
 		void Exploding();
 		const FloatRect GetGlobalBounds() const;
 		const StateProjectile GetState() const;
@@ -39,7 +40,8 @@ namespace sideSpaceShooter
 		float vitesseMax = 0;
 		float accelerationParSeconde = 0;
 		float rotation = 0;
-	
+
+		BitmaskManager bitmasks;
 
 		StateProjectile state = stateProjectileMoving; //Etat actuel du projectile.
 		StateProjectile previousState = stateProjectileMoving; //Etat precedant du projectile.

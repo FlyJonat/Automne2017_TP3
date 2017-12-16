@@ -322,13 +322,13 @@ void BoucleDeJeu::update()
 	}
 
 	projectileManager->Update();
-	projectileManager->TestCollision(joueur->GetGlobalBounds(), alien);
+	projectileManager->TestCollision(joueur->GetAnimation(), alien);
 
 	for (size_t i = 0; i < ennemis.size(); ++i)
 	{
 		if (ennemis[i]->GetState() == stateActeurALife)
 		{
-			projectileManager->TestCollision(ennemis[i]->GetGlobalBounds(), terran);
+			projectileManager->TestCollision(ennemis[i]->GetAnimation(), terran);
 
 			for (size_t j = 0; j < MAX_TUILES; ++j)
 			{

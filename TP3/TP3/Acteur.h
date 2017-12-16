@@ -34,7 +34,7 @@ namespace sideSpaceShooter
 		const ActeurType GetType() const;	
 		const Vector2f GetPosition() const;
 		const int GetLifeInfo() const;
-		const FloatRect GetGlobalBounds() const;
+		const Animation* GetAnimation() const;
 	protected:
 		bool readyToAttack = true;
 		

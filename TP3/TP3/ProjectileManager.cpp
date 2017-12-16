@@ -108,7 +108,7 @@ void ProjectileManager::Update()
 	}
 }
 
-int ProjectileManager::TestCollision(FloatRect objet, Alliance alliance)
+int ProjectileManager::TestCollision(const Animation *objet, Alliance alliance)
 {
 	int nbDammages = 0;
 	for (size_t i = 0; i < projectiles[alliance].size(); ++i)
@@ -116,7 +116,7 @@ int ProjectileManager::TestCollision(FloatRect objet, Alliance alliance)
 		if (projectiles[alliance][i]->GetState() == stateProjectileMoving)
 		{
 			//Détruit le projectile en cas de collision.
-			if (projectiles[alliance][i]->GetState() == stateProjectileMoving && projectiles[alliance][i]->IsColliding(objet))
+			if (projectiles[alliance][i]->GetState() == stateProjectileMoving && projectiles[alliance][i]->IsCollidingPixelPerfect(objet))
 			{
 				projectiles[alliance][i]->Exploding();
 				nbDammages += projectiles[alliance][i]->GetDammage();
