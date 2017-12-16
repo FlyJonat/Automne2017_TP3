@@ -8,6 +8,7 @@ ProjectileBouleDeFeu::ProjectileBouleDeFeu(Animation * animationProjectileSprite
 {
 	vitesseMax = 5;
 	accelerationParSeconde = 60;
+	dammage = 2;
 }
 
 

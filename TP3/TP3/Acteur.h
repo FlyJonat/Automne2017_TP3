@@ -29,11 +29,12 @@ namespace sideSpaceShooter
 		void Draw(RenderWindow& fenetre);
 		void Move(const Vector2f direction);
 		bool IsColliding(FloatRect objet);
-		const StateActeur GetState();
-		const ActeurType GetType();
 		void Shoot();
-		const Vector2f GetPosition();
-		int GetLifeInfo();
+		const StateActeur GetState() const;
+		const ActeurType GetType() const;	
+		const Vector2f GetPosition() const;
+		const int GetLifeInfo() const;
+		const FloatRect GetGlobalBounds() const;
 	protected:
 		bool readyToAttack = true;
 		

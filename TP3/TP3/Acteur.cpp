@@ -158,12 +158,12 @@ bool Acteur::IsColliding(FloatRect objet)
 	return false;
 }
 
-const StateActeur Acteur::GetState()
+const StateActeur Acteur::GetState() const
 {
 	return state;
 }
 
-const ActeurType Acteur::GetType()
+const ActeurType Acteur::GetType() const
 {
 	return acteurType;
 }
@@ -175,11 +175,19 @@ void Acteur::Shoot()
 	tempsDeRecharge = tempsEnFrameEntreDeuxTires;
 }
 
-const Vector2f Acteur::GetPosition()
+const Vector2f Acteur::GetPosition() const 
 {
 	return position;
 }
-int Acteur::GetLifeInfo()
+
+const int Acteur::GetLifeInfo() const
 {
 	return life;
+}
+
+const FloatRect Acteur::GetGlobalBounds() const
+{
+	animationsActeurSprites[state]->setPosition(position);
+
+	return animationsActeurSprites[state]->getGlobalBounds();
 }

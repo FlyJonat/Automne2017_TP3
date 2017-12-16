@@ -21,31 +21,31 @@ ProjectileManager::~ProjectileManager()
 }
 
 
-void ProjectileManager::GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction, Aliance aliance)
+void ProjectileManager::GenerateProjectile(ProjectileType projectileType, Vector2f position, Vector2f direction, Alliance Alliance)
 {
 	
 	if (projectileType == laser)
 	{
 		Projectile* p = new ProjectileLaser(animations[animationLaser], animations[animationProjectileExplosion], 11, position, direction);
-		projectiles[aliance].push_back(p);
+		projectiles[Alliance].push_back(p);
 	}
 	
 	else if (projectileType == bouleDeFeu)
 	{
 		Projectile* a = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, position, direction);
-		projectiles[aliance].push_back(a);
+		projectiles[Alliance].push_back(a);
 		direction.y = 1;
 		Projectile* b = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, position, direction);
-		projectiles[aliance].push_back(b);
+		projectiles[Alliance].push_back(b);
 		direction.y = -1;
 		Projectile* c = new ProjectileBouleDeFeu(animations[animationBouleDeFeu], animations[animationProjectileExplosion], 6, position, direction);
-		projectiles[aliance].push_back(c);
+		projectiles[Alliance].push_back(c);
 	}
 	
 	else if (projectileType == missile)
 	{
 		Projectile* d = new ProjectileMissile(animations[animationMissile], animations[animationProjectileExplosion], 8, position, direction);
-		projectiles[aliance].push_back(d);
+		projectiles[Alliance].push_back(d);
 	}
 
 	
@@ -106,7 +106,24 @@ void ProjectileManager::Update()
 			projectiles[i][j]->Update();
 		}
 	}
-	
+}
+
+int ProjectileManager::TestCollision(FloatRect objet, Alliance alliance)
+{
+	int nbDammages = 0;
+	for (size_t i = 0; i < projectiles[alliance].size(); ++i)
+	{
+		if (projectiles[alliance][i]->GetState() == stateProjectileMoving)
+		{
+			//Détruit le projectile en cas de collision.
+			if (projectiles[alliance][i]->GetState() == stateProjectileMoving && projectiles[alliance][i]->IsColliding(objet))
+			{
+				projectiles[alliance][i]->Exploding();
+				nbDammages += projectiles[alliance][i]->GetDammage();
+			}
+		}
+	}
+	return nbDammages;
 }
 void ProjectileManager::Drawn(RenderWindow& fenetre)
 {

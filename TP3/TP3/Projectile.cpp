@@ -75,7 +75,7 @@ void Projectile::Exploding()
 	rotation = GetRandomNum(360);
 }
 
-const StateProjectile Projectile::GetState()
+const StateProjectile Projectile::GetState() const
 {
 	return state;
 }
@@ -86,8 +86,13 @@ int Projectile::GetRandomNum(int max)
 	return numRandom = rand() % max;
 }
 
-const FloatRect Projectile::GetGlobalBounds()
+const FloatRect Projectile::GetGlobalBounds() const
 {
 	animationsProjectilesSprites[state]->setPosition(position);
 	return animationsProjectilesSprites[state]->getGlobalBounds();
+}
+
+const int Projectile::GetDammage() const
+{
+	return dammage;
 }

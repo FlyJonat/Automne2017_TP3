@@ -24,8 +24,9 @@ namespace sideSpaceShooter
 		void Draw(RenderWindow& fenetre);
 		const bool IsColliding(FloatRect objet);
 		void Exploding();
-		const FloatRect GetGlobalBounds();
-		const StateProjectile GetState();
+		const FloatRect GetGlobalBounds() const;
+		const StateProjectile GetState() const;
+		const int GetDammage() const;
 
 	protected:
 		int GetRandomNum(int max);
@@ -34,6 +35,7 @@ namespace sideSpaceShooter
 		int nbFramePourUnCycle = 0;
 		int nbAnimation = 0;
 		int timeInFrameForEachAnimations = 6;
+		int dammage = 0;
 		float vitesseMax = 0;
 		float accelerationParSeconde = 0;
 		float rotation = 0;

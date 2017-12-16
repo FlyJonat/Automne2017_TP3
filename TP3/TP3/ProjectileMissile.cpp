@@ -8,6 +8,7 @@ ProjectileMissile::ProjectileMissile(Animation * animationProjectileSprite, Anim
 {
 	vitesseMax = 6;
 	accelerationParSeconde = 6;
+	dammage = 3;
 }
 
 

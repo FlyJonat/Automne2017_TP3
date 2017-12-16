@@ -321,11 +321,15 @@ void BoucleDeJeu::update()
 		projectileManager->GenerateProjectile(laser, joueur->GetPosition(), direction, terran);
 	}
 
-	
+	projectileManager->Update();
+	projectileManager->TestCollision(joueur->GetGlobalBounds(), alien);
+
 	for (size_t i = 0; i < ennemis.size(); ++i)
 	{
 		if (ennemis[i]->GetState() == stateActeurALife)
 		{
+			projectileManager->TestCollision(ennemis[i]->GetGlobalBounds(), terran);
+
 			for (size_t j = 0; j < MAX_TUILES; ++j)
 			{
 				if (grilleDeTuiles[j] != nullptr)
@@ -342,8 +346,7 @@ void BoucleDeJeu::update()
 			ennemis[i]->Update(joueur->GetPosition());
 		}
 	}
-
-	projectileManager->Update();
+	
 
 	//mouvement background
 	deplacementBackgroundTotal += deplacementBackgroundX;

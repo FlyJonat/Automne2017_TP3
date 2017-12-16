@@ -8,6 +8,7 @@ ProjectileLaser::ProjectileLaser(Animation * animationProjectileSprite, Animatio
 {
 	vitesseMax = 60;
 	accelerationParSeconde = 60;
+	dammage = 1;
 }
 
 
